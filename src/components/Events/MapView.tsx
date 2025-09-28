@@ -9,6 +9,7 @@ interface MapViewProps {
 
 interface GoogleWindow extends Window {
   google: any;
+  markerClusterer?: any;
   initMap: () => void;
 }
 
@@ -18,6 +19,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<any>(null);
   const markersRef = useRef<any[]>([]);
+  const clustererRef = useRef<any>(null);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -33,7 +35,13 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
       const script = document.createElement('script');
       script.src = `https://maps.googleapis.com/maps/api/js?key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}&libraries=marker`;
       script.async = true;
-      script.onload = () => setIsLoaded(true);
+      script.onload = () => {
+        // Load MarkerClusterer library
+        const clustererScript = document.createElement('script');
+        clustererScript.src = 'https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js';
+        clustererScript.onload = () => setIsLoaded(true);
+        document.head.appendChild(clustererScript);
+      };
       document.head.appendChild(script);
     } else {
       setIsLoaded(true);
@@ -77,116 +85,93 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
   };
 
   const getNightModeStyles = () => [
-    // Water
+    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
     {
-      featureType: 'water',
-      elementType: 'geometry',
-      stylers: [{ color: '#1a2332' }]
+      featureType: "administrative.locality",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d59563" }],
     },
     {
-      featureType: 'water',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#4e6d70' }]
-    },
-    // Landscape
-    {
-      featureType: 'landscape',
-      elementType: 'geometry',
-      stylers: [{ color: '#263238' }]
+      featureType: "poi",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d59563" }],
     },
     {
-      featureType: 'landscape.man_made',
-      elementType: 'geometry',
-      stylers: [{ color: '#334155' }]
-    },
-    // Roads
-    {
-      featureType: 'road',
-      elementType: 'geometry',
-      stylers: [{ color: '#475569' }]
+      featureType: "poi.park",
+      elementType: "geometry",
+      stylers: [{ color: "#263c3f" }],
     },
     {
-      featureType: 'road.highway',
-      elementType: 'geometry',
-      stylers: [{ color: '#64748b' }]
+      featureType: "poi.park",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#6b9a76" }],
     },
     {
-      featureType: 'road.arterial',
-      elementType: 'geometry',
-      stylers: [{ color: '#52525b' }]
+      featureType: "road",
+      elementType: "geometry",
+      stylers: [{ color: "#38414e" }],
     },
     {
-      featureType: 'road',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#9ca3af' }]
+      featureType: "road",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#212a37" }],
     },
     {
-      featureType: 'road',
-      elementType: 'labels.text.stroke',
-      stylers: [{ color: '#1f2937' }]
-    },
-    // Buildings
-    {
-      featureType: 'poi',
-      elementType: 'geometry',
-      stylers: [{ color: '#374151' }]
+      featureType: "road",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#9ca5b3" }],
     },
     {
-      featureType: 'poi',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#6b7280' }]
+      featureType: "road.highway",
+      elementType: "geometry",
+      stylers: [{ color: "#746855" }],
     },
     {
-      featureType: 'poi',
-      elementType: 'labels.text.stroke',
-      stylers: [{ color: '#1f2937' }]
-    },
-    // Administrative
-    {
-      featureType: 'administrative',
-      elementType: 'geometry.stroke',
-      stylers: [{ color: '#4b5563' }]
+      featureType: "road.highway",
+      elementType: "geometry.stroke",
+      stylers: [{ color: "#1f2835" }],
     },
     {
-      featureType: 'administrative',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#9ca3af' }]
+      featureType: "road.highway",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#f3d19c" }],
     },
     {
-      featureType: 'administrative.land_parcel',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#6b7280' }]
-    },
-    // Transit
-    {
-      featureType: 'transit',
-      elementType: 'geometry',
-      stylers: [{ color: '#374151' }]
+      featureType: "transit",
+      elementType: "geometry",
+      stylers: [{ color: "#2f3948" }],
     },
     {
-      featureType: 'transit.station',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#9ca3af' }]
-    },
-    // Hide less important POIs
-    {
-      featureType: 'poi.business',
-      stylers: [{ visibility: 'off' }]
+      featureType: "transit.station",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#d59563" }],
     },
     {
-      featureType: 'poi.park',
-      elementType: 'geometry',
-      stylers: [{ color: '#1f2937' }]
+      featureType: "water",
+      elementType: "geometry",
+      stylers: [{ color: "#17263c" }],
     },
     {
-      featureType: 'poi.park',
-      elementType: 'labels.text.fill',
-      stylers: [{ color: '#6b7280' }]
-    }
+      featureType: "water",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#515c6d" }],
+    },
+    {
+      featureType: "water",
+      elementType: "labels.text.stroke",
+      stylers: [{ color: "#17263c" }],
+    },
   ];
 
   const updateMarkers = () => {
     if (!mapInstance.current || !window.google) return;
+
+    // Clear existing clusterer
+    if (clustererRef.current) {
+      clustererRef.current.clearMarkers();
+    }
 
     // Clear existing markers
     markersRef.current.forEach(marker => {
@@ -205,7 +190,6 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
           lat: event.latitude!,
           lng: event.longitude!
         },
-        map: mapInstance.current,
         title: event.name,
         icon: {
           path: window.google.maps.SymbolPath.CIRCLE,
@@ -213,7 +197,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
           fillOpacity: 0.9,
           strokeColor: '#1f2937', // Dark stroke for better visibility on dark theme
           strokeWeight: 3,
-          scale: 12 // Larger size for better visibility
+          scale: 8 // Original size for better visual balance
         }
       });
 
@@ -252,6 +236,45 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
       marker.infoWindow = infoWindow;
       markersRef.current.push(marker);
     });
+
+    // Initialize MarkerClusterer if library is available
+    if (window.markerClusterer && markersRef.current.length > 0) {
+      clustererRef.current = new window.markerClusterer.MarkerClusterer({
+        map: mapInstance.current,
+        markers: markersRef.current,
+        algorithm: new window.markerClusterer.SuperClusterAlgorithm({
+          radius: 60,
+          minPoints: 2,
+        }),
+        renderer: {
+          render: ({ markers, position }: { markers: any[], position: any }) => {
+            // Create custom cluster marker with count
+            return new window.google.maps.Marker({
+              position,
+              icon: {
+                path: window.google.maps.SymbolPath.CIRCLE,
+                fillColor: '#d59563',
+                fillOpacity: 0.8,
+                strokeColor: '#1f2937',
+                strokeWeight: 3,
+                scale: Math.min(markers.length * 4 + 10, 25),
+              },
+              label: {
+                text: markers.length.toString(),
+                color: '#1f2937',
+                fontWeight: 'bold',
+                fontSize: '12px'
+              }
+            });
+          }
+        }
+      });
+    } else {
+      // Fallback: add markers directly to map if clustering not available
+      markersRef.current.forEach(marker => {
+        marker.setMap(mapInstance.current);
+      });
+    }
 
     // Set up global event handler for "View Details" button
     (window as any).viewEventDetails = (eventId: string) => {
