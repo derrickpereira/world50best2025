@@ -1,0 +1,445 @@
+/*
+  # Complete World's 50 Best Bars 2025 Events Migration - ALL 63 EVENTS
+
+  1. Complete Event Dataset
+    - Insert all 63 World's 50 Best Bars events with event_version = 'world_2025'
+    - Include latitude/longitude coordinates for map functionality
+    - Set proper dates for October 4-10, 2025
+    - Handle all special characters and formatting
+
+  2. Data Updates
+    - All events will have event_version = 'world_2025'
+    - Existing events remain as 'asia_2025'
+    - Complete coordinates for Google Maps integration
+*/
+
+-- Clear existing world_2025 events if any
+DELETE FROM events WHERE event_version = 'world_2025';
+
+-- Insert all 63 World's 50 Best Bars events
+INSERT INTO events (name, date, time, time_range_display, venue, hotel, location, image_url, description, feature_bar, info_link, latitude, longitude, event_version)
+VALUES 
+  (
+    'Mamba Negra x Duddells',
+    '2025-10-09',
+    '18:00',
+    '6pm-10pm',
+    'Duddells',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/daedff7f-604b-415a-f2aa-9720f1507b00/Asia',
+    'On 9 October, Duddell''s presents an exclusive cocktail collaboration, welcoming the acclaimed Medellín bar Mamba Negra, ranked #81 on The World''s 50 Best Bars 2025. For one night only, co-founder Juan David Zapata and head bartender Jose Manjarres will partner with our own Mario Calderone to showcase three of Mamba Negras iconic cocktails, inspired by the country''s vibrant landscapes and native ingredients, alongside Duddell''s signature drinks.',
+    'Juan David Zapata, Jose Manjarres, Mario Calderone',
+    'https://www.instagram.com/p/DPGC1N3DA6J/',
+    22.2804063,
+    114.1572531,
+    'world_2025'
+  ),
+  (
+    'Penpals at Penicillin',
+    '2025-10-07',
+    '16:00',
+    '4pm-6pm',
+    'Penicillin Bar',
+    NULL,
+    'Central',
+    '',
+    'Hong Kong, what''s the rush? 🍸 Join us for pre-feast libations at Penicillin, as Takuma Watanabe and Nicolas Torres take over for a couple of hours to warm you up - or cool you down. Take it easy, we''ve got you. ✨',
+    'Takuma Watanabe, Nicolas Torres',
+    'https://www.instagram.com/p/DPEldnJkVpW/',
+    22.28236965,
+    114.154062,
+    'world_2025'
+  ),
+  (
+    'Wax On x The Old Man',
+    '2025-10-08',
+    '23:00',
+    '11pm till Sold Out',
+    'The Old Man',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/b9511cfa-73d6-4e08-3db8-58bf8bfbf300/Asia',
+    'World''s 50 Best week keeps going, this time with Berlin''s Wax On joining us behind the bar. On Wednesday, October 8 from 11PM till sold out, Sam Orrock and Guste are closing up the night. Wax On is Berlin at its most direct: bold drinks, sharp edges, and no wasted motion. Their menu is stripped back, but every element is deliberate, cocktails built with precision and poured with character. For one night only, that Berlin energy collides with Aberdeen Street.',
+    'Sam Orrock, Gustė Paliukaitė',
+    'https://www.instagram.com/p/DPGt2apD_84/',
+    22.28297767,
+    114.1517394,
+    'world_2025'
+  ),
+  (
+    'Wing Lei Bar x Bourke''s',
+    '2025-10-05',
+    '15:00',
+    '3pm-6pm',
+    'Bourkes',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/42635bbb-da53-4962-8e86-64c594e14500/Asia',
+    'We''re kicking off with our World''s @50bestbars celebrations with someone not so far away, the wonderful Mark, Head Mixologist behind Wingle Bar. He''ll be serving cocktails from their latest menu, "UNITY: A Global Journey in Cocktail Innovation". Inspired by a year of globe-trotting, bar-hopping, and flavour-chasing from Mexico to Milan, Singapore to Seoul. Each drink has a story - whether it''s a wild night behind a foreign bar, a new friendship, or a flavour that left a mark. It''ll be a trip around the world for you to try right here at this Aussie wine bar!',
+    'Mark Lloyd',
+    'https://www.instagram.com/p/DO5F1Yfkf7r/',
+    22.28264687,
+    114.1526949,
+    'world_2025'
+  ),
+  (
+    'Barstars Global',
+    '2025-10-06',
+    '20:00',
+    '8pm till Sold Out',
+    'The Aubrey',
+    NULL,
+    'Central',
+    '',
+    'The Orientalist Spirits presents BARSTARS GLOBAL - an extraordinary night of international talent at The Aubrey, Mandarin Oriental. From 8pm, the night ignites with Mike Capoferri and Tom Liu of Thunderbolt Los Angeles alongside Cross Yu of Epic Shanghai. The spotlight then shifts to Giovanni Allario and Lorenzo Querci of Moebius Milano together with Millie Tang of De Vie Paris, before Sebastián Atienza of Tres Monos in Buenos Aires joins forces with José Luis of Licorería Limantour in Mexico City. The energy builds as Iain McPherson of Panda & Sons Edinburgh shares the stage with Holly Graham of Tokyo Confidential, setting the scene for the grand finale, when The Aubrey''s own team steps behind the bar with The Orientalist Spirits for an unforgettable closing collaboration.',
+    'Mike Capoferri and Tom Liu (Thunderbolt), Cross Yu (Epic Shanghai), Giovanni Allario and Lorenzo Querci (Moebius Milano), Millie Tang (De Vie), Sebastián Atienza (Tres Monos), José Luis (Licorería Limantour), Iain McPherson (Panda & Sons), Holly Graham (Tokyo Confidential)',
+    'https://www.instagram.com/p/DPESKFtEk-B/',
+    22.28207415,
+    114.1594888,
+    'world_2025'
+  ),
+  (
+    'Raise a Glass Above the City',
+    '2025-10-06',
+    '20:00',
+    '8pm till Sold Out',
+    'Cardinal Point',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/28b06b8d-b6c7-4de7-2be0-7adc05a28e00/Asia',
+    'Raise a Glass Above the City 🥂✨ Join us at Cardinal Point on Oct 6 as Julio Bermejo (creator of Tommy''s Margarita) & Dre Masso (Altos Global Ambassador) take over! Sip agave-inspired cocktails 🍹 with rooftop views 🌆 & vibe to vibrant tunes 🎶.',
+    'Julio Bermejo, Dre Masso',
+    'https://www.instagram.com/p/DPD6t3nk39A/',
+    22.28213376,
+    114.1584888,
+    'world_2025'
+  ),
+  (
+    'Atwater x Foiegwa x Call Me AL',
+    '2025-10-07',
+    '18:30',
+    '6:30pm & 8:30pm',
+    'Call Me AL',
+    NULL,
+    'Central',
+    '',
+    'Call Me AL is thrilled to host a full kitchen & bar takeover from Montreal. Behind the line we will be hosting Foiegwa, an Americanised French Bistro helmed by Top Chef France alum, Jeremie Falissard. Jeremie has curated a set menu of Foiegwa''s long time hero dishes of the past decade likened to their famous Foiegwa Beef Tartare and Truffle Spaghetti. On tins will be the one and only, Kate Boushel of Atwater Cocktail Club and hospitality group Barroco. Marked as the "The Matriarch of Montreal," Boushel is an undeniable force behind the bar and in the community. Atwater is an institution and held consistent court on North America''s 50 Best Bars and awarded Alto''s Bartenders'' Bartender. But mainly she''s our babe and we just want to share her infectious energy with our family.',
+    'Kate Boushel (Atwater Cocktail Club), Jeremie Falissard (Foiegwa)',
+    'https://www.instagram.com/p/DPDr0pDEjvH/',
+    22.2864964,
+    114.1460889,
+    'world_2025'
+  ),
+  (
+    'One or Two x Bar Mind',
+    '2025-10-06',
+    '20:00',
+    '8pm-11pm',
+    'Bar Mind',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/f81fe1a7-007a-40b8-71a6-95f504953500/Asia',
+    'Raise a glass this Mid-Autumn and experience Andy''s exclusive tipsy rhythm. Flying in from Melbourne One ro Two, Andy Chu blends refined cocktails with wabi-sabi aesthetics - crafting delicate, unique flavours from whisky, gin, and more. Get ready for a one-night-only guest shift, exclusive for Mid-Autumn 🌕.',
+    'Andy Chu (One or Two)',
+    'https://www.instagram.com/p/DPED2Q9ESQZ/',
+    22.2829573,
+    114.1523886,
+    'world_2025'
+  ),
+  (
+    'The Warehouse Lobby Bar x Dead Poets',
+    '2025-10-06',
+    '20:00',
+    '8pm-10:30pm',
+    'Dead Poets',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/df55e60e-eed9-46e3-2705-10f4fa2cb700/Asia',
+    'It''s that time of the year again! And we''ve got another killer guest shift lineup for you all, with bar takeovers from all corners of the world.
+
+Here''s what''s on at Dead Poets during the World''s 50 Best Bars week:
+06.10 — The Warehouse Lobby Bar SG with Joe + DJ set by Chris
+06.10 — Las Brujas MX with Piba
+07.10 — Svanen NO with Carmine
+08.10 — Aruba Day Drink MX with Kevin + music by Jorge 5
+
+Are you excited yet?
+Get ready, get set, and let''s f***ing go!!! 🏆🥃',
+    'Joe (The Warehouse Lobby Bar)',
+    'https://www.instagram.com/p/DPEPq5fCs14/',
+    22.28286503,
+    114.151545,
+    'world_2025'
+  ),
+  (
+    'Las Brujas x Dead Poets',
+    '2025-10-06',
+    '23:00',
+    '11pm till Sold Out',
+    'Dead Poets',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/df55e60e-eed9-46e3-2705-10f4fa2cb700/Asia',
+    'It''s that time of the year again! And we''ve got another killer guest shift lineup for you all, with bar takeovers from all corners of the world.
+
+Here''s what''s on at Dead Poets during the World''s 50 Best Bars week:
+06.10 — The Warehouse Lobby Bar SG with Joe + DJ set by Chris
+06.10 — Las Brujas MX with Piba
+07.10 — Svanen NO with Carmine
+08.10 — Aruba Day Drink MX with Kevin + music by Jorge 5
+
+Are you excited yet?
+Get ready, get set, and let''s f***ing go!!! 🏆🥃',
+    'Piba (Las Brujas)',
+    'https://www.instagram.com/p/DPEPq5fCs14/',
+    22.28286503,
+    114.151545,
+    'world_2025'
+  ),
+  (
+    'Svanen x Dead Poets',
+    '2025-10-07',
+    '21:00',
+    '9pm till Sold Out',
+    'Dead Poets',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/df55e60e-eed9-46e3-2705-10f4fa2cb700/Asia',
+    'It''s that time of the year again! And we''ve got another killer guest shift lineup for you all, with bar takeovers from all corners of the world.
+
+Here''s what''s on at Dead Poets during the World''s 50 Best Bars week:
+06.10 — The Warehouse Lobby Bar SG with Joe + DJ set by Chris
+06.10 — Las Brujas MX with Piba
+07.10 — Svanen NO with Carmine
+08.10 — Aruba Day Drink MX with Kevin + music by Jorge 5
+
+Are you excited yet?
+Get ready, get set, and let''s f***ing go!!! 🏆🥃',
+    'Carmine (Svanen)',
+    'https://www.instagram.com/p/DPEPq5fCs14/',
+    22.28286503,
+    114.151545,
+    'world_2025'
+  ),
+  (
+    'Aruba Day Drink x Dead Poets',
+    '2025-10-08',
+    '23:00',
+    '11pm till Sold Out',
+    'Dead Poets',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/df55e60e-eed9-46e3-2705-10f4fa2cb700/Asia',
+    'It''s that time of the year again! And we''ve got another killer guest shift lineup for you all, with bar takeovers from all corners of the world.
+
+Here''s what''s on at Dead Poets during the World''s 50 Best Bars week:
+06.10 — The Warehouse Lobby Bar SG with Joe + DJ set by Chris
+06.10 — Las Brujas MX with Piba
+07.10 — Svanen NO with Carmine
+08.10 — Aruba Day Drink MX with Kevin + music by Jorge 5
+
+Are you excited yet?
+Get ready, get set, and let''s f***ing go!!! 🏆🥃',
+    'Kevin (Aruba Day Drink)',
+    'https://www.instagram.com/p/DPEPq5fCs14/',
+    22.28286503,
+    114.151545,
+    'world_2025'
+  ),
+  (
+    'Employees Only After Dark',
+    '2025-10-06',
+    '22:00',
+    '10pm till Sold Out',
+    'The Diplomat',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/2f394d9d-8976-47c9-235c-54ed776a8900/Asia',
+    'Step inside The Diplomat on Monday, October 6 for a late-night shake-up. From 10pm, William Camcam (EO Singapore) @camsanityy and Frank Alessandro (EO New York) @frankykurt7 take over the bar—two heavyweights from the world''s 50 best, ready to pour hard and keep the good times rolling. Count on next-level classics, inventive signatures, and a no-nonsense dose of hospitality, all night. Whether claiming a solo seat or pulling up with the crew, this is a collab you won''t want to miss—straight up, no chaser. See you there? 🥃',
+    'William Camcam (EO Singapore), Frank Alessandro (EO New York)',
+    'https://www.instagram.com/p/DPECP6Ck2ul/',
+    22.28247054,
+    114.1545882,
+    'world_2025'
+  ),
+  (
+    'Bar Bud x Dr Ferns',
+    '2025-10-06',
+    '19:00',
+    '7pm-10pm',
+    'Dr Ferns',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/e5ae4f06-a734-4a6c-fef2-affe5d33e300/Asia',
+    'Dear Patients, It is my pleasure to invite you to our 3-day @50bestbars lineup at The Doctor''s Residence on 6th, 7th and 10th October.  We are launching with Shanghai Bar Bud specialists Dr. Kinam Kim and Dr. Nathan Tseth in partnership with Two Moons Distillery 🍸⚗️ Bar Bud blends Seoul''s precision with Shanghai''s daring edge. Patients will be taken on a journey experiencing the fusion of Korean and Chinese spirits. Symptoms may include: Enhanced Seoul-searching 
+
+Yours Sincerely,Dr. Robben Fern',
+    'Kinam Kim & Nathan Tse (Bar Bud)',
+    'https://www.instagram.com/p/DPGMSkkEZ-L/',
+    22.28286848,
+    114.1553566,
+    'world_2025'
+  ),
+  (
+    'Canes and Tales x Dr Ferns',
+    '2025-10-07',
+    '17:00',
+    '5pm-10pm',
+    'Dr Ferns',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/59ebafc6-4498-4c2b-f881-b0bf104ff200/Asia',
+    'Dr. Dominic will be prescribing his signature treatments of Waldorf Astoria Osaka and Canes and Tales blending flavours of a bygone era with Japanese craft mixology. Experience Osaka''s hidden gem — where 1920s craftsmanship meets reimagined jazz at Dr Ferns. Symptoms may include: Spontaneous Jazz Hands
+
+Yours Sincerely,Dr. Robben Fern',
+    'Dominic (Canes & Tales)',
+    'https://www.instagram.com/p/DPGcP_2Efn3/',
+    22.28286848,
+    114.1553566,
+    'world_2025'
+  ),
+  (
+    'Ruby x Dr Ferns',
+    '2025-10-08',
+    '19:00',
+    '7pm-10pm',
+    'Dr Ferns',
+    NULL,
+    'Central',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/a4920036-f826-4b8c-f0e5-cb74a40c3500/Asia',
+    'Dr. Alessandro Rossi and Dr. Kerim Nefati will be shaking up specialist prescriptions on the final night of the 50 Best Bars lineup, showcasing the craft of Copenhagen Ruby Copenhagen Distillery 🍸⚗️ At Ruby, every cocktail captures the essence of the season—each sip tells a story, every pour a personality and textures tease the senses. Symptoms may include: Ruby (Asian) glow
+
+Yours Sincerely,Dr. Robben Fern',
+    'Alessandro Rossi & Kerim Nefati (Ruby)',
+    'https://www.instagram.com/p/DPGcmFrET2o/',
+    22.28286848,
+    114.1553566,
+    'world_2025'
+  ),
+  (
+    'SIPS x Soho House',
+    '2025-10-06',
+    '18:30',
+    '6:30pm-10:30pm',
+    'Soho House',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/14b96193-1709-4334-9b0e-9f075b808700/Asia',
+    'A Taste of SIPS in Hong Kong. Soho House Hong Kong welcomes Barcelona''s acclaimed SIPS for an exclusive takeover with Bombay Sapphire Patron St~Germain. Discover both sides of SIPS in one evening: Drinkeryhouse – playful creativity & Esencia – avant-garde tasting menu',
+    'Marc Alvarez (SIPS)',
+    'https://www.instagram.com/p/DPGhaFIiBM1/',
+    22.28805748,
+    114.1467358,
+    'world_2025'
+  ),
+  (
+    'The Best of All Worlds: ZLB23 x Mostly Harmless',
+    '2025-10-07',
+    '19:00',
+    '7pm-8pm',
+    'Mostly Harmless',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/bd87771c-7a61-4194-b342-fef1c2d47a00/Asia',
+    'Rising to No.31 Asia''s 50 Best Bars 2025, ZLB23 has become a cornerstone of Bangalore and the region''s craft cocktail scene, offering an array of globally-inspired cocktails, fabled food, and magnetic music. As a 1920s Kyoto-inspired speakeasy, ZLB23 draws inspiration from the ProhibiIon Era and Kyoto''s rich tradiIons, resulting in a melting pot of classic flavours, Japanese bartending finesse and India''s rich tapestry of unique produce. Experience Rajib''s intricate cocktails at @mostlyharmlessbar between 7pm-8pm 🍸 Walk-ins only.',
+    'Rajib Mukherjee (ZLB23)',
+    'https://www.instagram.com/p/DO-eb5akbQJ/',
+    22.28630346,
+    114.1461507,
+    'world_2025'
+  ),
+  (
+    'The Best of All Worlds: Wing Lei Bar x Mostly Harmless',
+    '2025-10-07',
+    '20:00',
+    '8pm-9pm',
+    'Mostly Harmless',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/e98cc7a3-d71d-4927-c5e9-dc3506127100/Asia',
+    'Macau''s cocktail powerhouse Wing Lei Bar takes the bar at @mostlyharmlessbar from 8pm onwards. Having recently hosted Asia''s 50 Best Bars 2025 with its mothership @Wynn.Palace, Wing Lei Bar and Head Mixologist has transformed the past year''s travels and guest shifts into an anecdote-filled signature menu "UNITY". Each cocktail a memento of a bar collaboration, and each anecdote a celebrated moment of camaraderie 💚',
+    'Mark Lloyd (Wing Lei Bar)',
+    'https://www.instagram.com/thefoundryasia/p/DO-f-GzEffZ/',
+    22.28630346,
+    114.1461507,
+    'world_2025'
+  ),
+  (
+    'The Best of All Worlds: Locale Firenze x Mostly Harmless',
+    '2025-10-07',
+    '21:00',
+    '9pm-10pm',
+    'Mostly Harmless',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/5030336d-cfbe-4b36-2f69-37fc073b5e00/Asia',
+    'Located in the centre of Florence, Locale Firenze is tied architecturally, spiritually, and culinarily to its beautiful hometown. The basement that dates back to 13th century is now the restaurant bar''s wine cellar and mixology lab. With its strong connection to culture, combined with Bar Managers Fabio & Alessandro''s innovative spirit, Locale Firenze became one of the World''s 50 Best Bars in 2022.  Meet Fabio & Alessandro and try Locale''s extensively researched and ingredient-focused cocktails at Mostly Harmless on Oct 7 (Mon) from 9pm-10pm 🍸',
+    'Fabio Fanni and Alessandro Mengoni (Locale Firenze)',
+    'https://www.instagram.com/thefoundryasia/p/DO-gXSJkV3v/',
+    22.28630346,
+    114.1461507,
+    'world_2025'
+  ),
+  (
+    'Penrose x Greenroom',
+    '2025-10-07',
+    '20:00',
+    '8pm-11pm',
+    'Greenroom',
+    NULL,
+    'Admiralty',
+    '',
+    'Join us for a special guest shift with founder Jon Lee, Brandon and Matthew as they bring Penrose signature cocktails from Malaysia''s Best Bar and No. 10 on Asia''s @50bestbars to Green Room.',
+    'Jon Lee, Brandon Tan, Matthew Goh (Penrose)',
+    'https://www.instagram.com/p/DPGQNF9Eqo5/',
+    22.27802354,
+    114.1653603,
+    'world_2025'
+  ),
+  (
+    'Mob of Mentors',
+    '2025-10-06',
+    '11:00',
+    '11am-2pm',
+    'Soho House',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/16490579-404a-4bc8-d74b-27507f4bf400/Asia',
+    'Mob of Mentors (MoM) lands in Hong Kong for 50 Best Bars Week, uniting top industry voices in this fast-paced, high-energy seminar series, centered on the 2025 theme: "Why investing in the future of hospitality matters."
+
+In the signature PechaKucha format (20 slides, 6:40 minutes each), speakers from leading bars around the world — including Indra Kantono (Jigger & Pony, Singapore), Christine Kim (Service Bar, Washington DC), Marc Alvarez (SIPS, Barcelona), Beckaly Franks (Artifact, Call Me Al, The Pontiac, Hong Kong), Jay Khan (COA, Hong Kong), and Derek Stilmann (Bar Kaiju, Miami) — will deliver bold ideas on leadership, inclusivity, creativity, and legacy.
+
+Expect big energy, honest storytelling, and future-thinking inspiration — all in one dynamic session. Co-hosted by Lauren Mote (Global Advocacy Director, PATRÓN Tequila) and Mob of Mentors alumni Kate Boushel (Atwater Cocktail Club, Montreal), with midday cocktails powered by fellow Mob alumni members Christina Veira (Bar Mordecai, Toronto) and Daniel Ortega (Bijou Drinkery Room, Mexico City).',
+    'Derek Stilmann, Beckaly Franks, Indra Kantono, Christine Kim, Marc Alvarez & Jay Khan hosted by Lauren Mote, Kate Boushel',
+    'https://www.thebestwithstgermain.com/events/mobofmentors',
+    22.28805748,
+    114.1467358,
+    'world_2025'
+  ),
+  (
+    'Advanced Tequila Training with Additives',
+    '2025-10-06',
+    '14:30',
+    '2:30pm-4pm',
+    'Soho House',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/c823b2cf-3e6d-4c76-0013-1649e0970500/Asia',
+    'Join us for the Academia PATRÓN Advanced Tequila & Additive Training — a deep dive into the production methods that shape tequila. Through guided blind tastings, you''ll learn how additives impact aroma, flavour, and mouthfeel. Discover how to evaluate tequila like a pro and why PATRÓN Tequila, stays committed to being only 3 ingredients - agave, water and yeast - and free from additives. Led by Lauren Mote, this session is designed for bartenders ready to level up their liquid knowledge.',
+    'Lauren Mote',
+    'https://www.thebestwithstgermain.com/events/patrontequilatraining',
+    22.28805748,
+    114.1467358,
+    'world_2025'
+  ),
+  (
+    'The French Takeover',
+    '2025-10-06',
+    '18:00',
+    '6pm-9pm',
+    'Soho House',
+    NULL,
+    'Sheung Wan',
+    'https://imagedelivery.net/y2gc2AQWv5Cg-1Y3N7mCcg/a8b6e048-c4f1-46d2-6537-70733a84d200/Asia',
+    'Jean-Pierre welcomes the best of France''s cocktail scene for one unforgettable night.

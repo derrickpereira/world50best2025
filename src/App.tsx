@@ -29,7 +29,7 @@ function App() {
 
   // Track page views when tab changes
   useEffect(() => {
-    const pageTitle = `Asia's 50 Best Bars 2025 - ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
+    const pageTitle = `World's 50 Best Bars 2025 - ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
     trackPageView(pageTitle);
   }, [activeTab]);
 

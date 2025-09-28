@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Map, List } from 'lucide-react';
 import { useEventStore } from '../../store/eventStore';
 import { useAuthStore } from '../../store/authStore';
 import { Event } from '../../types';
 import EventFilters from './EventFilters';
 import EventCard from './EventCard';
 import EventModal from './EventModal';
+import MapView from './MapView';
 import AuthModal from '../Auth/AuthModal';
 
 const EventsPage: React.FC = () => {
@@ -31,6 +33,7 @@ const EventsPage: React.FC = () => {
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [initialShowTimeSelectorForModal, setInitialShowTimeSelectorForModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
 
   useEffect(() => {
     fetchEvents();
@@ -83,11 +86,11 @@ const EventsPage: React.FC = () => {
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
             <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent text-3xl md:text-5xl">
-              Asia's 50 Best Bars Event Planner
+              World's 50 Best Bars 2025
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            July 11-16, 2025 • Macau & Hong Kong • 70+ Exclusive Events
+            October 4-10, 2025 • Hong Kong • Exclusive Bar Week Events
           </p>
         </motion.div>
 
@@ -102,11 +105,39 @@ const EventsPage: React.FC = () => {
           onSearchChange={setSearchQuery}
         />
 
+        {/* View Toggle */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-gray-200 dark:bg-gray-800 rounded-lg p-1 flex">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                viewMode === 'list'
+                  ? 'bg-white dark:bg-gray-700 text-amber-600 dark:text-amber-400 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <List size={18} />
+              <span>List</span>
+            </button>
+            <button
+              onClick={() => setViewMode('map')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                viewMode === 'map'
+                  ? 'bg-white dark:bg-gray-700 text-amber-600 dark:text-amber-400 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              <Map size={18} />
+              <span>Map</span>
+            </button>
+          </div>
+        </div>
+
         {filteredEvents.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600 dark:text-gray-400 text-lg">No events found matching your criteria.</p>
           </div>
-        ) : (
+        ) : viewMode === 'list' ? (
           <motion.div
             layout
             className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
@@ -121,6 +152,14 @@ const EventsPage: React.FC = () => {
               />
             ))}
           </motion.div>
+        ) : (
+          <MapView 
+            events={filteredEvents}
+            onEventSelect={(event) => {
+              setSelectedEvent(event);
+              setInitialShowTimeSelectorForModal(false);
+            }}
+          />
         )}
       </div>
 

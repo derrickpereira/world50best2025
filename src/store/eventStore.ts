@@ -45,6 +45,7 @@ export const useEventStore = create<EventState>((set, get) => ({
       const { data, error } = await supabase
         .from('events')
         .select('*')
+        .eq('event_version', 'world_2025')
         .order('date', { ascending: true });
       
       if (error) throw error;
@@ -295,6 +296,9 @@ export const generateArrivalTimeSlots = (event: Event): string[] => {
 // Helper function to check for arrival time conflicts
 export const checkArrivalTimeConflict = async (newEvent: Event, newArrivalTime: string, userId: string): Promise<boolean> => {
   try {
+    // Handle TBA events
+    if (!newEvent.date) return false;
+    
     // Get user's existing agenda with arrival times for the same date
     const { data: existingAgenda, error } = await supabase
       .from('user_agenda')
@@ -317,8 +321,11 @@ export const checkArrivalTimeConflict = async (newEvent: Event, newArrivalTime: 
     
     // Check against each existing event's arrival time
     for (const agendaItem of existingAgenda) {
-      const existingEvent = agendaItem.events;
+      const existingEvent = agendaItem.events as any;
       const existingArrivalTime = agendaItem.arrival_time || existingEvent.time;
+      
+      // Skip if existing event has no date
+      if (!existingEvent.date) continue;
       
       // Parse existing arrival time
       const existingEventDate = parseISO(existingEvent.date);

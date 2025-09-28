@@ -6,11 +6,13 @@ export interface Event {
   time_range_display?: string; // Full time range description (e.g., "7pm till late")
   venue: string;
   hotel?: string;
-  location: 'Macau' | 'Hong Kong';
+  location: 'Macau' | 'Hong Kong' | 'Central' | 'Sheung Wan' | 'Admiralty' | 'Kowloon';
   image_url: string;
   description: string;
   feature_bar: string;
   info_link?: string;
+  latitude?: number;
+  longitude?: number;
   created_at?: string;
 }
 
@@ -29,7 +31,6 @@ export interface UserAgenda {
   id: string;
   user_id: string;
   event_id: string;
-  arrival_time?: string; // User's chosen arrival time
   arrival_time?: string; // User's chosen arrival time
   added_at: string;
 }
@@ -102,4 +103,4 @@ export interface User {
 }
 
 export type SortOption = 'date' | 'name' | 'venue';
-export type FilterLocation = 'all' | 'Macau' | 'Hong Kong';
+export type FilterLocation = 'all' | 'Central' | 'Sheung Wan' | 'Admiralty' | 'Kowloon';
