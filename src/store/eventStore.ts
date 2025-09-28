@@ -203,7 +203,18 @@ export const useEventStore = create<EventState>((set, get) => ({
           // Handle TBA events - put them at the end
           if (!a.date || !a.time) return 1;
           if (!b.date || !b.time) return -1;
-          return new Date(a.date + ' ' + a.time).getTime() - new Date(b.date + ' ' + b.time).getTime();
+          
+          // Create proper DateTime objects for accurate chronological sorting
+          const [aHours, aMinutes] = a.time.split(':').map(Number);
+          const [bHours, bMinutes] = b.time.split(':').map(Number);
+          
+          const dateTimeA = parseISO(a.date);
+          dateTimeA.setHours(aHours, aMinutes, 0, 0);
+          
+          const dateTimeB = parseISO(b.date);
+          dateTimeB.setHours(bHours, bMinutes, 0, 0);
+          
+          return dateTimeA.getTime() - dateTimeB.getTime();
         case 'name':
           return a.name.localeCompare(b.name);
         case 'venue':
