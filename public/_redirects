@@ -1,0 +1,3 @@
+# Netlify redirects for SPA deployed to subpath
+# Handle all routes within /asia50/ by serving the index.html from the root of the publish directory
+/asia50/* /index.html 200
