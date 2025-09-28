@@ -83,11 +83,11 @@ const EventsPage: React.FC = () => {
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
             <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent text-3xl md:text-5xl">
-              World's 50 Best Bars Event Planner
+              Asia's 50 Best Bars Event Planner
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            October 4-10, 2024 • Hong Kong • Premium Events Across the City
+            July 11-16, 2025 • Macau & Hong Kong • 70+ Exclusive Events
           </p>
         </motion.div>
 

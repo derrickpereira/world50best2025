@@ -7,7 +7,6 @@ import { trackAgendaAction, trackSearch, trackFilter } from '../utils/analytics'
 interface EventState {
   events: Event[];
   loading: boolean;
-  currentEventVersion: 'asia_2025' | 'world_2024';
   sortBy: SortOption;
   filterLocation: FilterLocation;
   filterDate: string;
@@ -17,7 +16,6 @@ interface EventState {
   
   // Actions
   fetchEvents: () => Promise<void>;
-  setEventVersion: (version: 'asia_2025' | 'world_2024') => void;
   setSortBy: (sort: SortOption) => void;
   setFilterLocation: (location: FilterLocation) => void;
   setFilterDate: (date: string) => void;
@@ -34,7 +32,6 @@ const MIN_TIME_BETWEEN_ARRIVALS_MINUTES = 30;
 export const useEventStore = create<EventState>((set, get) => ({
   events: [],
   loading: false,
-  currentEventVersion: 'world_2024', // Default to the new World's 50 Best event
   sortBy: 'date',
   filterLocation: 'all',
   filterDate: '',
@@ -45,34 +42,10 @@ export const useEventStore = create<EventState>((set, get) => ({
   fetchEvents: async () => {
     set({ loading: true });
     try {
-      const { currentEventVersion } = get();
-      
-      // Try to fetch events with event_version filter
-      let data = null;
-      let error = null;
-      
-      try {
-        const result = await supabase
-          .from('events')
-          .select('*')
-          .eq('event_version', currentEventVersion)
-          .order('date', { ascending: true });
-        data = result.data;
-        error = result.error;
-      } catch (fetchError: any) {
-        // If event_version column doesn't exist, fetch all events as fallback
-        if (fetchError?.message?.includes('event_version') || fetchError?.code === '42703') {
-          console.log('event_version column not found, fetching all events...');
-          const result = await supabase
-            .from('events')
-            .select('*')
-            .order('date', { ascending: true });
-          data = result.data;
-          error = result.error;
-        } else {
-          throw fetchError;
-        }
-      }
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: true });
       
       if (error) throw error;
       set({ events: data || [] });
@@ -81,12 +54,6 @@ export const useEventStore = create<EventState>((set, get) => ({
     } finally {
       set({ loading: false });
     }
-  },
-
-  setEventVersion: (version) => {
-    set({ currentEventVersion: version });
-    // Refetch events when version changes
-    get().fetchEvents();
   },
 
   setSortBy: (sort) => set({ sortBy: sort }),

@@ -1,16 +1,15 @@
-# World's 50 Best Bars 2024 Event Planner
+# Asia's 50 Best Bars 2025 Event Planner
 
-A comprehensive event planning web application for World's 50 Best Bars 2024 awards week (October 4-10, 2024) across Hong Kong's premier districts.
+A comprehensive event planning web application for Asia's 50 Best Bars 2025 awards week (July 11-16, 2025) spanning Macau and Hong Kong with 50+ exclusive events.
 
 ## 🚀 Features
 
 ### Core Functionality
-- **📅 Events Browser** - Discover exclusive events across Hong Kong with advanced filtering and search
+- **📅 Events Browser** - Discover 50+ exclusive events with advanced filtering and search
 - **⏰ Personal Agenda** - Create and manage your personalized event schedule
-- **⭐ Bar Tracker** - Track visits to the world's top bars with progress visualization
+- **⭐ Bar Tracker** - Track visits to Asia's top 100 bars with progress visualization
 - **🎯 Predictions** - Make your top 5 predictions for the awards ceremony
 - **📰 News & Updates** - Stay informed with latest news and FAQ
-- **🗺️ Map View** - View events by location with precise coordinates
 
 ### Technical Highlights
 - **Modern Stack**: React 18 + TypeScript + Tailwind CSS + Supabase
@@ -18,7 +17,6 @@ A comprehensive event planning web application for World's 50 Best Bars 2024 awa
 - **Real-time Data**: Live updates with Supabase integration
 - **Authentication**: Secure user accounts with email/password
 - **Smooth Animations**: Framer Motion for premium user experience
-- **Location Services**: Precise event mapping with latitude/longitude coordinates
 
 ## 🛠 Setup Instructions
 
@@ -50,11 +48,10 @@ If automatic setup doesn't work, run these SQL commands in your Supabase SQL edi
 ## 📱 Usage Guide
 
 ### For Event Attendees
-1. **Browse Events** - Filter by Hong Kong district, date, or search by venue/bar
+1. **Browse Events** - Filter by location, date, or search by venue/bar
 2. **Build Agenda** - Add events to your personal schedule
 3. **Track Bar Visits** - Mark bars you've visited and track progress
 4. **Make Predictions** - Predict the top 5 bars before the ceremony
-5. **Map View** - Explore events geographically across Hong Kong
 
 ### For Event Organizers
 - Real-time view of user engagement
@@ -113,16 +110,11 @@ src/
 ## 📊 Database Schema
 
 ### Core Tables
-- **events** - Event information with location coordinates and version support
+- **events** - Event information and details
 - **bars** - Bar rankings and information
 - **user_agenda** - Personal event schedules
 - **user_bar_visits** - Bar visit tracking
 - **user_predictions** - Top 5 predictions
-
-### New Features in V2
-- **Location Coordinates** - Latitude and longitude for precise mapping
-- **Event Versioning** - Support for multiple event series (Asia 2025, World 2024)
-- **District-Level Filtering** - Hong Kong district-specific location filtering
 
 ### Relationships
 - Users can have multiple agenda items
@@ -164,4 +156,4 @@ For technical issues or feature requests, please check the FAQ section in the ap
 
 ---
 
-**Built with ❤️ for the global cocktail community**
+**Built with ❤️ for Asia's cocktail community**

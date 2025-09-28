@@ -44,15 +44,9 @@ const EventCard: React.FC<EventCardProps> = ({
         
         {/* Location Badge */}
         <div className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-semibold ${
-          event.location === 'Central' 
-            ? 'bg-blue-500/90 text-white'
-            : event.location === 'Sheung Wan'
-            ? 'bg-emerald-500/90 text-white'
-            : event.location === 'Admiralty'
-            ? 'bg-purple-500/90 text-white'
-            : event.location === 'Kowloon'
-            ? 'bg-orange-500/90 text-white'
-            : 'bg-gray-500/90 text-white'
+          event.location === 'Macau' 
+            ? 'bg-emerald-500/90 text-white' 
+            : 'bg-blue-500/90 text-white'
         }`}>
           {event.location}
         </div>

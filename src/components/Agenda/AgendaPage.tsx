@@ -271,27 +271,21 @@ const AgendaPage: React.FC = () => {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-emerald-400">
-                  {agendaEvents.filter(e => e.location === 'Central').length}
+                  {agendaEvents.filter(e => e.location === 'Macau').length}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Central Events</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Macau Events</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-400">
-                  {agendaEvents.filter(e => e.location === 'Sheung Wan').length}
+                  {agendaEvents.filter(e => e.location === 'Hong Kong').length}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Sheung Wan Events</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Hong Kong Events</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-400">
-                  {agendaEvents.filter(e => e.location === 'Admiralty').length}
+                  {new Set(agendaEvents.map(e => e.feature_bar)).size}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Admiralty Events</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-orange-400">
-                  {agendaEvents.filter(e => e.location === 'Kowloon').length}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Kowloon Events</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">Unique Bars</div>
               </div>
             </div>
           </div>

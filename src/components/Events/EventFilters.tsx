@@ -25,13 +25,12 @@ const EventFilters: React.FC<EventFiltersProps> = ({
 }) => {
   const eventDates = [
     { value: '', label: 'All Dates' },
-    { value: '2024-10-04', label: 'October 4th' },
-    { value: '2024-10-05', label: 'October 5th' },
-    { value: '2024-10-06', label: 'October 6th' },
-    { value: '2024-10-07', label: 'October 7th' },
-    { value: '2024-10-08', label: 'October 8th' },
-    { value: '2024-10-09', label: 'October 9th' },
-    { value: '2024-10-10', label: 'October 10th' },
+    { value: '2025-07-11', label: 'July 11th' },
+    { value: '2025-07-12', label: 'July 12th' },
+    { value: '2025-07-13', label: 'July 13th' },
+    { value: '2025-07-14', label: 'July 14th' },
+    { value: '2025-07-15', label: 'July 15th' },
+    { value: '2025-07-16', label: 'July 16th' },
   ];
 
   return (
@@ -59,10 +58,8 @@ const EventFilters: React.FC<EventFiltersProps> = ({
             className="flex-1 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
           >
             <option value="all">All Locations</option>
-            <option value="Central">Central</option>
-            <option value="Sheung Wan">Sheung Wan</option>
-            <option value="Admiralty">Admiralty</option>
-            <option value="Kowloon">Kowloon</option>
+            <option value="Macau">Macau</option>
+            <option value="Hong Kong">Hong Kong</option>
           </select>
         </div>
 

@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase';
-import { eventsData, worldsBestEventsData, barsData, newsSeedData, faqSeedData } from '../data/seedData';
+import { eventsData, barsData, newsSeedData, faqSeedData } from '../data/seedData';
 
 let isSeeding = false;
 let hasSeeded = false;
@@ -17,21 +17,10 @@ export const seedDatabase = async () => {
     console.log('Starting database seeding...');
 
     // Check if data already exists with a more thorough check
-    // First check if event_version column exists
-    let existingEvents = null;
-    let eventsError = null;
-    let hasEventVersionColumn = true;
-    
-    try {
-      const { data, error } = await supabase
-        .from('events')
-        .select('id')
-        .limit(3);
-      existingEvents = data;
-      eventsError = error;
-    } catch (error: any) {
-      eventsError = error;
-    }
+    const { data: existingEvents, error: eventsError } = await supabase
+      .from('events')
+      .select('id')
+      .limit(5);
 
     const { data: existingBars, error: barsError } = await supabase
       .from('bars')
@@ -70,19 +59,19 @@ export const seedDatabase = async () => {
 
     // Only seed if tables are completely empty
     if (!existingEvents || existingEvents.length === 0) {
-      console.log('Seeding World\'s 50 Best events...');
+      console.log('Seeding events...');
       const { error: eventsInsertError } = await supabase
         .from('events')
-        .insert(worldsBestEventsData);
+        .insert(eventsData);
 
       if (eventsInsertError) {
-        console.error('Error seeding World\'s 50 Best events:', eventsInsertError);
+        console.error('Error seeding events:', eventsInsertError);
         return;
       } else {
-        console.log(`Successfully seeded ${worldsBestEventsData.length} World's 50 Best events`);
+        console.log(`Successfully seeded ${eventsData.length} events`);
       }
     } else {
-      console.log(`World's 50 Best events table already contains ${existingEvents.length} records, skipping seed`);
+      console.log(`Events table already contains ${existingEvents.length} records, skipping seed`);
     }
 
     if (!existingBars || existingBars.length === 0) {

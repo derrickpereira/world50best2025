@@ -6,16 +6,12 @@ export interface Event {
   time_range_display?: string; // Full time range description (e.g., "7pm till late")
   venue: string;
   hotel?: string;
-  location: 'Macau' | 'Hong Kong' | 'Central' | 'Sheung Wan' | 'Admiralty' | 'Kowloon';
+  location: 'Macau' | 'Hong Kong';
   image_url: string;
   description: string;
   feature_bar: string;
   info_link?: string;
   created_at?: string;
-  latitude?: number;
-  longitude?: number;
-  event_version?: 'asia_2025' | 'world_2024';
-  event_year?: number;
 }
 
 export interface Bar {
@@ -106,4 +102,4 @@ export interface User {
 }
 
 export type SortOption = 'date' | 'name' | 'venue';
-export type FilterLocation = 'all' | 'Macau' | 'Hong Kong' | 'Central' | 'Sheung Wan' | 'Admiralty' | 'Kowloon';
+export type FilterLocation = 'all' | 'Macau' | 'Hong Kong';
