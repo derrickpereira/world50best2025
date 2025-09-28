@@ -20,28 +20,17 @@ export const seedDatabase = async () => {
     // First check if event_version column exists
     let existingEvents = null;
     let eventsError = null;
+    let hasEventVersionColumn = true;
     
     try {
       const { data, error } = await supabase
         .from('events')
-        .select('id, event_version')
-        .eq('event_version', 'world_2024')
+        .select('id')
         .limit(3);
       existingEvents = data;
       eventsError = error;
     } catch (error: any) {
-      // If event_version column doesn't exist, check for any events
-      if (error?.message?.includes('event_version') || error?.code === '42703') {
-        console.log('event_version column not found, checking for any existing events...');
-        const { data, error: fallbackError } = await supabase
-          .from('events')
-          .select('id')
-          .limit(3);
-        existingEvents = data;
-        eventsError = fallbackError;
-      } else {
-        eventsError = error;
-      }
+      eventsError = error;
     }
 
     const { data: existingBars, error: barsError } = await supabase
