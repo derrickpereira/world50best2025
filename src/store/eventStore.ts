@@ -46,11 +46,33 @@ export const useEventStore = create<EventState>((set, get) => ({
     set({ loading: true });
     try {
       const { currentEventVersion } = get();
-      const { data, error } = await supabase
-        .from('events')
-        .select('*')
-        .eq('event_version', currentEventVersion)
-        .order('date', { ascending: true });
+      
+      // Try to fetch events with event_version filter
+      let data = null;
+      let error = null;
+      
+      try {
+        const result = await supabase
+          .from('events')
+          .select('*')
+          .eq('event_version', currentEventVersion)
+          .order('date', { ascending: true });
+        data = result.data;
+        error = result.error;
+      } catch (fetchError: any) {
+        // If event_version column doesn't exist, fetch all events as fallback
+        if (fetchError?.message?.includes('event_version') || fetchError?.code === '42703') {
+          console.log('event_version column not found, fetching all events...');
+          const result = await supabase
+            .from('events')
+            .select('*')
+            .order('date', { ascending: true });
+          data = result.data;
+          error = result.error;
+        } else {
+          throw fetchError;
+        }
+      }
       
       if (error) throw error;
       set({ events: data || [] });

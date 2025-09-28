@@ -17,11 +17,32 @@ export const seedDatabase = async () => {
     console.log('Starting database seeding...');
 
     // Check if data already exists with a more thorough check
-    const { data: existingEvents, error: eventsError } = await supabase
-      .from('events')
-      .select('id')
-      .eq('event_version', 'world_2024')
-      .limit(3);
+    // First check if event_version column exists
+    let existingEvents = null;
+    let eventsError = null;
+    
+    try {
+      const { data, error } = await supabase
+        .from('events')
+        .select('id, event_version')
+        .eq('event_version', 'world_2024')
+        .limit(3);
+      existingEvents = data;
+      eventsError = error;
+    } catch (error: any) {
+      // If event_version column doesn't exist, check for any events
+      if (error?.message?.includes('event_version') || error?.code === '42703') {
+        console.log('event_version column not found, checking for any existing events...');
+        const { data, error: fallbackError } = await supabase
+          .from('events')
+          .select('id')
+          .limit(3);
+        existingEvents = data;
+        eventsError = fallbackError;
+      } else {
+        eventsError = error;
+      }
+    }
 
     const { data: existingBars, error: barsError } = await supabase
       .from('bars')
