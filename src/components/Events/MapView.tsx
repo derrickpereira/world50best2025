@@ -59,20 +59,131 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
       zoom: 12,
       center: HONG_KONG_CENTER,
       mapTypeId: window.google.maps.MapTypeId.ROADMAP,
-      styles: [
-        {
-          featureType: 'poi',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }]
-        }
-      ],
+      styles: getNightModeStyles(),
       mapTypeControl: false,
       streetViewControl: false,
-      fullscreenControl: false,
+      fullscreenControl: true,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: window.google.maps.ControlPosition.RIGHT_CENTER,
+        style: window.google.maps.ZoomControlStyle.LARGE
+      },
+      scaleControl: true,
+      rotateControl: true,
+      gestureHandling: 'cooperative'
     });
 
     updateMarkers();
   };
+
+  const getNightModeStyles = () => [
+    // Water
+    {
+      featureType: 'water',
+      elementType: 'geometry',
+      stylers: [{ color: '#1a2332' }]
+    },
+    {
+      featureType: 'water',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#4e6d70' }]
+    },
+    // Landscape
+    {
+      featureType: 'landscape',
+      elementType: 'geometry',
+      stylers: [{ color: '#263238' }]
+    },
+    {
+      featureType: 'landscape.man_made',
+      elementType: 'geometry',
+      stylers: [{ color: '#334155' }]
+    },
+    // Roads
+    {
+      featureType: 'road',
+      elementType: 'geometry',
+      stylers: [{ color: '#475569' }]
+    },
+    {
+      featureType: 'road.highway',
+      elementType: 'geometry',
+      stylers: [{ color: '#64748b' }]
+    },
+    {
+      featureType: 'road.arterial',
+      elementType: 'geometry',
+      stylers: [{ color: '#52525b' }]
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#9ca3af' }]
+    },
+    {
+      featureType: 'road',
+      elementType: 'labels.text.stroke',
+      stylers: [{ color: '#1f2937' }]
+    },
+    // Buildings
+    {
+      featureType: 'poi',
+      elementType: 'geometry',
+      stylers: [{ color: '#374151' }]
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#6b7280' }]
+    },
+    {
+      featureType: 'poi',
+      elementType: 'labels.text.stroke',
+      stylers: [{ color: '#1f2937' }]
+    },
+    // Administrative
+    {
+      featureType: 'administrative',
+      elementType: 'geometry.stroke',
+      stylers: [{ color: '#4b5563' }]
+    },
+    {
+      featureType: 'administrative',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#9ca3af' }]
+    },
+    {
+      featureType: 'administrative.land_parcel',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#6b7280' }]
+    },
+    // Transit
+    {
+      featureType: 'transit',
+      elementType: 'geometry',
+      stylers: [{ color: '#374151' }]
+    },
+    {
+      featureType: 'transit.station',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#9ca3af' }]
+    },
+    // Hide less important POIs
+    {
+      featureType: 'poi.business',
+      stylers: [{ visibility: 'off' }]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'geometry',
+      stylers: [{ color: '#1f2937' }]
+    },
+    {
+      featureType: 'poi.park',
+      elementType: 'labels.text.fill',
+      stylers: [{ color: '#6b7280' }]
+    }
+  ];
 
   const updateMarkers = () => {
     if (!mapInstance.current || !window.google) return;
@@ -99,10 +210,10 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
         icon: {
           path: window.google.maps.SymbolPath.CIRCLE,
           fillColor: getMarkerColor(event.location),
-          fillOpacity: 0.8,
-          strokeColor: '#ffffff',
-          strokeWeight: 2,
-          scale: 8
+          fillOpacity: 0.9,
+          strokeColor: '#1f2937', // Dark stroke for better visibility on dark theme
+          strokeWeight: 3,
+          scale: 12 // Larger size for better visibility
         }
       });
 
