@@ -75,7 +75,7 @@ const AdminDashboard: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            Analytics and insights for Asia's 50 Best Bars 2025
+            Analytics and insights for World's 50 Best Bars 2025
           </p>
         </motion.div>
 

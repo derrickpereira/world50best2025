@@ -109,7 +109,7 @@ const AgendaPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            Your personalized schedule for Asia's 50 Best Bars 2025
+            Your personalized schedule for World's 50 Best Bars 2025
           </p>
         </motion.div>
 

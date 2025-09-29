@@ -88,7 +88,7 @@ const PredictionsPage: React.FC = () => {
         <div className="text-center">
           <Target size={64} className="mx-auto text-red-600 dark:text-red-400 mb-4" />
           <h1 className="text-4xl font-bold mb-4">Make Your Predictions</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">Sign in to predict the top 5 bars for Asia's 50 Best Bars 2025</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">Sign in to predict the top 5 bars for World's 50 Best Bars 2025</p>
           <button
             onClick={() => setShowAuthModal(true)}
             className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
@@ -118,7 +118,7 @@ const PredictionsPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            Predict which bars will claim the top 5 spots in Asia's 50 Best Bars 2025
+            Predict which bars will claim the top 5 spots in World's 50 Best Bars 2025
           </p>
         </motion.div>
 

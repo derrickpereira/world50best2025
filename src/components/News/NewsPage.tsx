@@ -48,7 +48,7 @@ const NewsPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            Stay informed about Asia's 50 Best Bars 2025
+            Stay informed about World's 50 Best Bars 2025
           </p>
         </motion.div>
 

@@ -70,7 +70,7 @@ const BarsPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg mb-6">
-            Track your visits to Asia's finest bars
+            Track your visits to World's finest bars
           </p>
           <p className="text-gray-500 dark:text-gray-500 text-center text-sm mb-6">
             (The current list is a mix of 2025's 51-100 winners and 2024's Top 50, the final list will be updated after the awards)
