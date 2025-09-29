@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/themeStore';
 import { seedDatabase, resetSeedingState } from './utils/seedDatabase';
@@ -11,10 +12,67 @@ import BarsPage from './components/Bars/BarsPage';
 import PredictionsPage from './components/Predictions/PredictionsPage';
 import AdminDashboard from './components/Admin/AdminDashboard';
 
+// Inner component that has access to useLocation
+const AppContent: React.FC = () => {
+  const location = useLocation();
+
+  // Track page views when location changes
+  useEffect(() => {
+    const path = location.pathname;
+    let pageTitle = "World's 50 Best Bars 2025";
+    
+    if (path.startsWith('/event/')) {
+      pageTitle += ' - Event Details';
+    } else if (path === '/agenda') {
+      pageTitle += ' - My Agenda';
+    } else if (path === '/news') {
+      pageTitle += ' - News & Updates';
+    } else if (path === '/bars') {
+      pageTitle += ' - Bar Directory';
+    } else if (path === '/predict') {
+      pageTitle += ' - Predictions';
+    } else if (path === '/admin') {
+      pageTitle += ' - Admin Dashboard';
+    } else {
+      pageTitle += ' - Events';
+    }
+    
+    trackPageView(pageTitle);
+  }, [location]);
+
+  // Get current tab based on location
+  const getCurrentTab = () => {
+    const path = location.pathname;
+    if (path.startsWith('/event/') || path === '/' || path === '') return 'events';
+    if (path === '/agenda') return 'agenda';
+    if (path === '/news') return 'news';
+    if (path === '/bars') return 'bars';
+    if (path === '/predict') return 'predict';
+    if (path === '/admin') return 'admin';
+    return 'events';
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-black">
+      <Navigation activeTab={getCurrentTab()} />
+      <main>
+        <Routes>
+          <Route path="/" element={<EventsPage />} />
+          <Route path="/event/:eventId" element={<EventsPage />} />
+          <Route path="/agenda" element={<AgendaPage />} />
+          <Route path="/news" element={<NewsPage />} />
+          <Route path="/bars" element={<BarsPage />} />
+          <Route path="/predict" element={<PredictionsPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Routes>
+      </main>
+    </div>
+  );
+};
+
 function App() {
   const { initialize, loading } = useAuthStore();
   const { initializeTheme } = useThemeStore();
-  const [activeTab, setActiveTab] = useState('events');
 
   useEffect(() => {
     initialize();
@@ -27,12 +85,6 @@ function App() {
     setTimeout(() => seedDatabase(), 1000);
   }, [initialize]);
 
-  // Track page views when tab changes
-  useEffect(() => {
-    const pageTitle = `World's 50 Best Bars 2025 - ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}`;
-    trackPageView(pageTitle);
-  }, [activeTab]);
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center">
@@ -44,32 +96,10 @@ function App() {
     );
   }
 
-  const renderPage = () => {
-    switch (activeTab) {
-      case 'events':
-        return <EventsPage />;
-      case 'agenda':
-        return <AgendaPage />;
-      case 'news':
-        return <NewsPage />;
-      case 'bars':
-        return <BarsPage />;
-      case 'predict':
-        return <PredictionsPage />;
-      case 'admin':
-        return <AdminDashboard />;
-      default:
-        return <EventsPage />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black">
-      <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
-      <main>
-        {renderPage()}
-      </main>
-    </div>
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

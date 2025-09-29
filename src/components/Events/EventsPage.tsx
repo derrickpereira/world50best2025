@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Map, List } from 'lucide-react';
 import { useEventStore } from '../../store/eventStore';
@@ -11,8 +12,11 @@ import MapView from './MapView';
 import AuthModal from '../Auth/AuthModal';
 
 const EventsPage: React.FC = () => {
+  const { eventId } = useParams<{ eventId: string }>();
+  const navigate = useNavigate();
   const { user } = useAuthStore();
   const {
+    events,
     loading,
     sortBy,
     filterLocation,
@@ -34,6 +38,7 @@ const EventsPage: React.FC = () => {
   const [initialShowTimeSelectorForModal, setInitialShowTimeSelectorForModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
+  const [eventNotFound, setEventNotFound] = useState(false);
 
   useEffect(() => {
     fetchEvents();
@@ -44,6 +49,35 @@ const EventsPage: React.FC = () => {
       fetchUserAgenda();
     }
   }, [user, fetchUserAgenda]);
+
+  // Handle deep linking to specific events
+  useEffect(() => {
+    if (eventId && events.length > 0 && !loading) {
+      const targetEvent = events.find(event => event.id === eventId);
+      if (targetEvent) {
+        setSelectedEvent(targetEvent);
+        setInitialShowTimeSelectorForModal(false);
+        setEventNotFound(false);
+      } else {
+        setEventNotFound(true);
+        // Redirect to events page after 3 seconds if event not found
+        setTimeout(() => {
+          navigate('/');
+          setEventNotFound(false);
+        }, 3000);
+      }
+    }
+  }, [eventId, events, loading, navigate]);
+
+  // Update URL when modal closes (remove event ID from URL)
+  const handleModalClose = () => {
+    setSelectedEvent(null);
+    setInitialShowTimeSelectorForModal(false);
+    // If we came from a direct link, navigate back to events page
+    if (eventId) {
+      navigate('/', { replace: true });
+    }
+  };
 
   const filteredEvents = getFilteredEvents();
 
@@ -133,7 +167,19 @@ const EventsPage: React.FC = () => {
           </div>
         </div>
 
-        {filteredEvents.length === 0 ? (
+        {eventNotFound ? (
+          <div className="text-center py-12">
+            <div className="bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg p-6 max-w-md mx-auto">
+              <h2 className="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">Event Not Found</h2>
+              <p className="text-red-700 dark:text-red-300 mb-4">
+                The event you're looking for doesn't exist or may have been removed.
+              </p>
+              <p className="text-sm text-red-600 dark:text-red-400">
+                Redirecting to events page in a few seconds...
+              </p>
+            </div>
+          </div>
+        ) : filteredEvents.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-600 dark:text-gray-400 text-lg">No events found matching your criteria.</p>
           </div>
@@ -168,10 +214,7 @@ const EventsPage: React.FC = () => {
         isOpen={!!selectedEvent}
         initialShowTimeSelector={initialShowTimeSelectorForModal}
         isInAgenda={selectedEvent ? userAgenda[selectedEvent.id] !== undefined : false}
-        onClose={() => {
-          setSelectedEvent(null);
-          setInitialShowTimeSelectorForModal(false);
-        }}
+        onClose={handleModalClose}
         onToggleAgenda={handleToggleAgenda}
       />
 

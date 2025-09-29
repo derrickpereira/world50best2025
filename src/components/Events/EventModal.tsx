@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Clock, Calendar, ExternalLink, Plus, Check, AlertCircle } from 'lucide-react';
+import { X, MapPin, Clock, Calendar, ExternalLink, Plus, Check, AlertCircle, Share } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
 import { Event } from '../../types';
@@ -32,6 +32,7 @@ const EventModal: React.FC<EventModalProps> = ({
   
   const [selectedArrivalTime, setSelectedArrivalTime] = useState<string>('');
   const [showTimeSelectorInternal, setShowTimeSelectorInternal] = useState(false);
+  const [shareSuccess, setShareSuccess] = useState(false);
   
   // Generate available time slots for the event
   const availableTimeSlots = event ? generateArrivalTimeSlots(event) : [];
@@ -90,6 +91,42 @@ const EventModal: React.FC<EventModalProps> = ({
     setShowTimeSelectorInternal(false);
   };
 
+  const handleShare = async () => {
+    const shareUrl = `${window.location.origin}/event/${event.id}`;
+    
+    try {
+      // Try using the Web Share API first (mobile devices)
+      if (navigator.share) {
+        await navigator.share({
+          title: `${event.name} - World's 50 Best Bars 2025`,
+          text: `Check out this exclusive bar event: ${event.name} featuring ${event.feature_bar}`,
+          url: shareUrl,
+        });
+        return;
+      }
+      
+      // Fallback to clipboard
+      await navigator.clipboard.writeText(shareUrl);
+      setShareSuccess(true);
+      setTimeout(() => setShareSuccess(false), 2000);
+    } catch (error) {
+      console.error('Share failed:', error);
+      // Final fallback - try to copy to clipboard manually
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = shareUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        setShareSuccess(true);
+        setTimeout(() => setShareSuccess(false), 2000);
+      } catch (fallbackError) {
+        console.error('Fallback copy failed:', fallbackError);
+      }
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -108,12 +145,34 @@ const EventModal: React.FC<EventModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-red-500/50 dark:border-red-500/20"
           >
+            {/* Share Button */}
+            <button
+              onClick={handleShare}
+              className="absolute top-4 right-16 z-10 p-2 bg-gray-200/80 dark:bg-black/50 rounded-full text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-black/70 transition-colors"
+              title="Share this event"
+            >
+              <Share size={20} />
+            </button>
+
+            {/* Close Button */}
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-10 p-2 bg-gray-200/80 dark:bg-black/50 rounded-full text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-black/70 transition-colors"
             >
               <X size={24} />
             </button>
+
+            {/* Share Success Message */}
+            {shareSuccess && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="absolute top-16 right-4 z-10 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+              >
+                Link copied to clipboard!
+              </motion.div>
+            )}
 
             {/* Hero Image */}
             <div className="relative h-64 md:h-80">

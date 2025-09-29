@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Bell, Star, Target, User, LogOut, Sun, Moon, Shield } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useThemeStore } from '../../store/themeStore';
@@ -6,13 +7,38 @@ import AuthModal from '../Auth/AuthModal';
 
 interface NavigationProps {
   activeTab: string;
-  onTabChange: (tab: string) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
+const Navigation: React.FC<NavigationProps> = ({ activeTab }) => {
+  const navigate = useNavigate();
   const { user, signOut, isAdminUser } = useAuthStore();
   const { theme, toggleTheme } = useThemeStore();
   const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleTabChange = (tabId: string) => {
+    switch (tabId) {
+      case 'events':
+        navigate('/');
+        break;
+      case 'agenda':
+        navigate('/agenda');
+        break;
+      case 'news':
+        navigate('/news');
+        break;
+      case 'bars':
+        navigate('/bars');
+        break;
+      case 'predict':
+        navigate('/predict');
+        break;
+      case 'admin':
+        navigate('/admin');
+        break;
+      default:
+        navigate('/');
+    }
+  };
 
   const tabs = [
     { id: 'events', label: 'Events', icon: Calendar },
@@ -74,7 +100,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
             {tabs.map(({ id, label, icon: Icon }) => (
               <button
                 key={id}
-                onClick={() => onTabChange(id)}
+                onClick={() => handleTabChange(id)}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 ${
                   activeTab === id
                     ? 'bg-red-500 text-white font-semibold'
@@ -139,7 +165,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, onTabChange }) => {
           {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => onTabChange(id)}
+              onClick={() => handleTabChange(id)}
               className={`flex flex-col items-center space-y-1 px-3 py-2 transition-all duration-200 ${
                 activeTab === id
                   ? 'text-red-600 dark:text-red-400'
