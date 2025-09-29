@@ -124,7 +124,7 @@ const EventsPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            October 4-10, 2025 • Hong Kong • Exclusive Bar Week Events
+            October 4-10, 2025 • Hong Kong • {events.length} Exclusive Events
           </p>
         </motion.div>
 
