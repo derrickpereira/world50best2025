@@ -106,7 +106,7 @@ const EventModal: React.FC<EventModalProps> = ({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-amber-500/50 dark:border-amber-500/20"
+            className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-red-500/50 dark:border-red-500/20"
           >
             <button
               onClick={onClose}
@@ -164,7 +164,7 @@ const EventModal: React.FC<EventModalProps> = ({
               {/* Venue Info */}
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3 text-gray-700 dark:text-gray-300">
-                  <MapPin size={20} className="text-amber-600 dark:text-amber-400" />
+                  <MapPin size={20} className="text-red-600 dark:text-red-400" />
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white">{event.venue}</div>
                     {event.hotel && (
@@ -184,7 +184,7 @@ const EventModal: React.FC<EventModalProps> = ({
                         <select
                           value={selectedArrivalTime}
                           onChange={(e) => setSelectedArrivalTime(e.target.value)}
-                          className="flex-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                          className="flex-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
                         >
                           {availableTimeSlots.map((timeSlot) => (
                             <option key={timeSlot} value={timeSlot}>
@@ -199,7 +199,7 @@ const EventModal: React.FC<EventModalProps> = ({
                       <div className="flex space-x-2">
                         <button
                           onClick={handleConfirmTime}
-                          className="flex-1 bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-amber-600 transition-colors"
+                          className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
                         >
                           Confirm
                         </button>
@@ -227,8 +227,8 @@ const EventModal: React.FC<EventModalProps> = ({
                       onClick={handleMainActionButtonClick}
                       className={`flex items-center justify-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
                         isInAgenda
-                          ? 'bg-amber-500 text-white hover:bg-amber-600'
-                          : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-amber-500 hover:text-white border border-gray-300 dark:border-gray-700'
+                          ? 'bg-red-500 text-white hover:bg-red-600'
+                          : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-red-500 hover:text-white border border-gray-300 dark:border-gray-700'
                       }`}
                     >
                       {isInAgenda ? <Check size={20} /> : <Plus size={20} />}
@@ -247,7 +247,7 @@ const EventModal: React.FC<EventModalProps> = ({
 
               {/* Featuring */}
               <div className="mb-6">
-                <h3 className="text-lg font-semibold text-amber-600 dark:text-amber-400 mb-2">Featuring</h3>
+                <h3 className="text-lg font-semibold text-red-600 dark:text-red-400 mb-2">Featuring</h3>
                 <p className="text-gray-900 dark:text-white">{event.feature_bar}</p>
               </div>
 
@@ -266,7 +266,7 @@ const EventModal: React.FC<EventModalProps> = ({
                     href={event.info_link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center space-x-2 text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors"
+                    className="inline-flex items-center space-x-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors"
                   >
                     <ExternalLink size={18} />
                     <span>Read More Details</span>

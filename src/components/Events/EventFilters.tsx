@@ -44,7 +44,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
           placeholder="Search events, venues, or bars..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full pl-12 pr-4 py-3 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+          className="w-full pl-12 pr-4 py-3 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
         />
       </div>
 
@@ -56,7 +56,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
           <select
             value={filterLocation}
             onChange={(e) => onLocationChange(e.target.value as FilterLocation)}
-            className="flex-1 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+            className="flex-1 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
           >
             <option value="all">All Districts</option>
             <option value="Central">Central</option>
@@ -72,7 +72,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
           <select
             value={filterDate}
             onChange={(e) => onDateChange(e.target.value)}
-            className="flex-1 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+            className="flex-1 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
           >
             {eventDates.map((date) => (
               <option key={date.value} value={date.value}>
@@ -86,7 +86,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
         <select
           value={sortBy}
           onChange={(e) => onSortChange(e.target.value as SortOption)}
-          className="bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+          className="bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-3 py-2 text-gray-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
         >
           <option value="date">Sort by Date</option>
           <option value="name">Sort by Name</option>

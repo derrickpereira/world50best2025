@@ -31,7 +31,7 @@ const EventCard: React.FC<EventCardProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       whileHover={{ y: -2 }}
-      className="bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl overflow-hidden hover:border-amber-500/50 dark:hover:border-amber-500/30 transition-all duration-300 cursor-pointer group"
+      className="bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl overflow-hidden hover:border-red-500/50 dark:hover:border-red-500/30 transition-all duration-300 cursor-pointer group"
       onClick={() => onCardClick(event, false)}
     >
       <div className="relative h-48 overflow-hidden">
@@ -66,8 +66,8 @@ const EventCard: React.FC<EventCardProps> = ({
           style={{ display: isTBA ? 'none' : 'block' }}
           className={`absolute top-4 right-4 p-2 rounded-full backdrop-blur-sm transition-all duration-200 ${
             isInAgenda
-              ? 'bg-amber-500 text-black hover:bg-amber-600'
-              : 'bg-gray-200/80 dark:bg-black/50 text-gray-900 dark:text-white hover:bg-amber-500 hover:text-white'
+              ? 'bg-red-500 text-black hover:bg-red-600'
+              : 'bg-gray-200/80 dark:bg-black/50 text-gray-900 dark:text-white hover:bg-red-500 hover:text-white'
           }`}
           title={isInAgenda ? 'Remove from agenda' : 'Add to agenda'}
         >
@@ -93,7 +93,7 @@ const EventCard: React.FC<EventCardProps> = ({
       </div>
 
       <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors">
+        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
           {event.name}
         </h3>
         
@@ -105,7 +105,7 @@ const EventCard: React.FC<EventCardProps> = ({
           </span>
         </div>
 
-        <div className="text-amber-600 dark:text-amber-400 text-sm font-medium mb-3">
+        <div className="text-red-600 dark:text-red-400 text-sm font-medium mb-3">
           Featuring: {event.feature_bar}
         </div>
 
