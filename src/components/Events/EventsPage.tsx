@@ -69,7 +69,7 @@ const EventsPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Loading events...</p>
         </div>
       </div>
@@ -85,7 +85,7 @@ const EventsPage: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent text-3xl md:text-5xl">
+            <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent text-3xl md:text-5xl">
               World's 50 Best Bars 2025
             </span>
           </h1>
@@ -112,7 +112,7 @@ const EventsPage: React.FC = () => {
               onClick={() => setViewMode('list')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-white dark:bg-gray-700 text-amber-600 dark:text-amber-400 shadow-sm'
+                  ? 'bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 shadow-sm'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
@@ -123,7 +123,7 @@ const EventsPage: React.FC = () => {
               onClick={() => setViewMode('map')}
               className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                 viewMode === 'map'
-                  ? 'bg-white dark:bg-gray-700 text-amber-600 dark:text-amber-400 shadow-sm'
+                  ? 'bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 shadow-sm'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
               }`}
             >

@@ -82,7 +82,7 @@ const AgendaPage: React.FC = () => {
           <p className="text-gray-600 dark:text-gray-400 mb-6">Sign in to create and manage your personal event agenda</p>
           <button
             onClick={() => setShowAuthModal(true)}
-            className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
           >
             Sign In
           </button>
@@ -104,7 +104,7 @@ const AgendaPage: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">
               My Agenda
             </span>
           </h1>
@@ -131,8 +131,8 @@ const AgendaPage: React.FC = () => {
                   onClick={() => setSelectedDate(date)}
                   className={`flex-shrink-0 w-20 p-3 rounded-xl border transition-all duration-200 ${
                     selectedDate === date
-                      ? 'bg-amber-500 text-white border-amber-500'
-                      : 'bg-gray-100 dark:bg-gray-900/50 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700/50 hover:border-amber-500/50 dark:hover:border-amber-500/30'
+                      ? 'bg-red-500 text-white border-red-500'
+                      : 'bg-gray-100 dark:bg-gray-900/50 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700/50 hover:border-red-500/50 dark:hover:border-red-500/30'
                   }`}
                 >
                   <div className="text-center">
@@ -142,7 +142,7 @@ const AgendaPage: React.FC = () => {
                       <div className={`text-xs mt-1 px-1.5 py-0.5 rounded-full ${
                         selectedDate === date
                           ? 'bg-white/20 text-white'
-                          : 'bg-amber-500/20 text-amber-600 dark:text-amber-400'
+                          : 'bg-red-500/20 text-red-600 dark:text-red-400'
                       }`}>
                         {eventsCount} event{eventsCount !== 1 ? 's' : ''}
                       </div>
@@ -196,8 +196,8 @@ const AgendaPage: React.FC = () => {
           ) : (
             selectedDateEvents
               .sort((a, b) => {
-                const arrivalTimeA = userAgenda[a.id] || a.time;
-                const arrivalTimeB = userAgenda[b.id] || b.time;
+                const arrivalTimeA = userAgenda[a.id] || a.time || '';
+                const arrivalTimeB = userAgenda[b.id] || b.time || '';
                 return arrivalTimeA.localeCompare(arrivalTimeB);
               })
               .map((event) => (
@@ -206,7 +206,7 @@ const AgendaPage: React.FC = () => {
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl overflow-hidden hover:border-amber-500/50 dark:hover:border-amber-500/30 transition-all duration-300 cursor-pointer"
+                  className="bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl overflow-hidden hover:border-red-500/50 dark:hover:border-red-500/30 transition-all duration-300 cursor-pointer"
                   onClick={() => setSelectedEvent(event)}
                 >
                   <div className="p-4">
@@ -266,7 +266,7 @@ const AgendaPage: React.FC = () => {
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Agenda Summary</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-amber-400">{agendaEvents.length}</div>
+                <div className="text-2xl font-bold text-red-400">{agendaEvents.length}</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">Total Events</div>
               </div>
               <div className="text-center">
