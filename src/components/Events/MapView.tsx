@@ -210,7 +210,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
             <p class="text-xs text-gray-500 mb-2">${event.location} • ${event.time_range_display || ''}</p>
             <button 
               onclick="window.viewEventDetails('${event.id}')" 
-              class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-3 py-1 rounded transition-colors"
+              class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded transition-colors"
             >
               View Details
             </button>
@@ -351,7 +351,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
           {!isLoaded && (
             <div className="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-700">
               <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500 mx-auto mb-2"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500 mx-auto mb-2"></div>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Loading map...</p>
               </div>
             </div>
