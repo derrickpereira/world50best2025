@@ -1,0 +1,23 @@
+{
+    "name": "World's 50 Best Bars 2025",
+    "short_name": "World's 50 Best",
+    "description": "Plan your perfect week at World's 50 Best Bars 2025 awards. Browse events, create your agenda, track bar visits, and make predictions.",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ef4444",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "start_url": "/",
+    "scope": "/",
+    "orientation": "portrait-primary"
+}
