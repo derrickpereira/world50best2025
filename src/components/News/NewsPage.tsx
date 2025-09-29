@@ -27,7 +27,7 @@ const NewsPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Loading news and updates...</p>
         </div>
       </div>
@@ -43,7 +43,7 @@ const NewsPage: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">
               News & Updates
             </span>
           </h1>
@@ -55,7 +55,7 @@ const NewsPage: React.FC = () => {
         {/* Latest News */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-            <Bell className="mr-3 text-amber-600 dark:text-amber-400" size={24} />
+            <Bell className="mr-3 text-red-600 dark:text-red-400" size={24} />
             Latest News
           </h2>
           
@@ -74,11 +74,11 @@ const NewsPage: React.FC = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl p-6 hover:border-amber-500/50 dark:hover:border-amber-500/30 transition-all duration-300"
+                    className="bg-white dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl p-6 hover:border-red-500/50 dark:hover:border-red-500/30 transition-all duration-300"
                   >
                     <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0 p-3 bg-amber-500/20 rounded-lg">
-                        <IconComponent className="text-amber-600 dark:text-amber-400" size={24} />
+                      <div className="flex-shrink-0 p-3 bg-red-500/20 rounded-lg">
+                        <IconComponent className="text-red-600 dark:text-red-400" size={24} />
                       </div>
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
@@ -106,7 +106,7 @@ const NewsPage: React.FC = () => {
         {/* FAQ Section */}
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-            <Star className="mr-3 text-amber-600 dark:text-amber-400" size={24} />
+            <Star className="mr-3 text-red-600 dark:text-red-400" size={24} />
             Frequently Asked Questions
           </h2>
           
@@ -126,10 +126,10 @@ const NewsPage: React.FC = () => {
                 >
                   <details className="group">
                     <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-800/50 transition-colors">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-open:text-amber-600 dark:group-open:text-amber-400 transition-colors pr-4 flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-open:text-red-600 dark:group-open:text-red-400 transition-colors pr-4 flex-1">
                         {item.title}
                       </h3>
-                      <div className="text-gray-600 dark:text-gray-400 group-open:text-amber-600 dark:group-open:text-amber-400 group-open:rotate-180 transition-all duration-200 flex-shrink-0">
+                      <div className="text-gray-600 dark:text-gray-400 group-open:text-red-600 dark:group-open:text-red-400 group-open:rotate-180 transition-all duration-200 flex-shrink-0">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                         </svg>
@@ -137,7 +137,7 @@ const NewsPage: React.FC = () => {
                     </summary>
                     <div className="px-6 pb-6">
                       <div 
-                        className="text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-a:text-amber-600 dark:prose-a:text-amber-400 prose-a:underline hover:prose-a:no-underline"
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-a:text-red-600 dark:prose-a:text-red-400 prose-a:underline hover:prose-a:no-underline"
                         dangerouslySetInnerHTML={{ __html: item.content }}
                       />
                     </div>

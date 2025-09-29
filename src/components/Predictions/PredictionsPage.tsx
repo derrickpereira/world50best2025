@@ -86,12 +86,12 @@ const PredictionsPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white flex items-center justify-center">
         <div className="text-center">
-          <Target size={64} className="mx-auto text-amber-600 dark:text-amber-400 mb-4" />
+          <Target size={64} className="mx-auto text-red-600 dark:text-red-400 mb-4" />
           <h1 className="text-4xl font-bold mb-4">Make Your Predictions</h1>
           <p className="text-gray-600 dark:text-gray-400 mb-6">Sign in to predict the top 5 bars for Asia's 50 Best Bars 2025</p>
           <button
             onClick={() => setShowAuthModal(true)}
-            className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
           >
             Sign In
           </button>
@@ -113,7 +113,7 @@ const PredictionsPage: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">
               Top 5 Predictions
             </span>
           </h1>
@@ -126,7 +126,7 @@ const PredictionsPage: React.FC = () => {
           {/* Predictions List */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-              <Trophy className="mr-3 text-amber-600 dark:text-amber-400" size={24} />
+              <Trophy className="mr-3 text-red-600 dark:text-red-400" size={24} />
               Your Top 5 Predictions
             </h2>
 
@@ -140,7 +140,7 @@ const PredictionsPage: React.FC = () => {
                     key={`position-${position}`}
                     layout
                     className={`bg-white dark:bg-gray-900/80 backdrop-blur-sm border rounded-xl p-4 transition-all duration-300 ${
-                      bar ? 'border-amber-500 dark:border-amber-500/50' : 'border-gray-300 dark:border-gray-700/50 border-dashed'
+                      bar ? 'border-red-500 dark:border-red-500/50' : 'border-gray-300 dark:border-gray-700/50 border-dashed'
                     }`}
                   >
                     <div className="flex items-center space-x-4">
@@ -151,7 +151,7 @@ const PredictionsPage: React.FC = () => {
                           : position === 2
                           ? 'bg-gradient-to-r from-gray-300 to-gray-500 text-black'
                           : position === 3
-                          ? 'bg-gradient-to-r from-amber-600 to-amber-800 text-white'
+                          ? 'bg-gradient-to-r from-red-600 to-red-800 text-white'
                           : 'bg-gradient-to-r from-gray-600 to-gray-800 text-white'
                       }`}>
                         {position}
@@ -190,7 +190,7 @@ const PredictionsPage: React.FC = () => {
               disabled={selectedBars.length === 0 || isSaved}
               className={`w-full py-3 rounded-lg font-semibold transition-all duration-200 ${
                 selectedBars.length > 0 && !isSaved
-                  ? 'bg-amber-500 hover:bg-amber-600 text-white'
+                  ? 'bg-red-500 hover:bg-red-600 text-white'
                   : 'bg-gray-300 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed'
               }`}
             >
@@ -206,7 +206,7 @@ const PredictionsPage: React.FC = () => {
           {/* Bar Selection */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-              <Star className="mr-3 text-amber-600 dark:text-amber-400" size={24} />
+              <Star className="mr-3 text-red-600 dark:text-red-400" size={24} />
               Select Bars
             </h2>
 
@@ -217,7 +217,7 @@ const PredictionsPage: React.FC = () => {
                 placeholder="Search bars..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+                className="w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
               />
             </div>
 
@@ -231,7 +231,7 @@ const PredictionsPage: React.FC = () => {
                   disabled={selectedBars.length >= 5}
                   className={`w-full text-left p-4 bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 rounded-lg transition-all duration-200 ${
                     selectedBars.length < 5
-                      ? 'hover:border-amber-500/50 dark:hover:border-amber-500/30 hover:bg-gray-200 dark:hover:bg-gray-800/50'
+                      ? 'hover:border-red-500/50 dark:hover:border-red-500/30 hover:bg-gray-200 dark:hover:bg-gray-800/50'
                       : 'opacity-50 cursor-not-allowed'
                   }`}
                 >
@@ -241,7 +241,7 @@ const PredictionsPage: React.FC = () => {
                       <p className="text-gray-600 dark:text-gray-400 text-sm">{bar.city}, {bar.country}</p>
                     </div>
                     {(bar.rank_2024 || bar.rank_2025) && (
-                      <div className="text-amber-600 dark:text-amber-400 text-sm">
+                      <div className="text-red-600 dark:text-red-400 text-sm">
                         #{bar.rank_2025 || bar.rank_2024}
                       </div>
                     )}

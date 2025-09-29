@@ -49,7 +49,7 @@ const BarsPage: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400">Loading bars...</p>
         </div>
       </div>
@@ -65,7 +65,7 @@ const BarsPage: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">
               Bar Tracker
             </span>
           </h1>
@@ -80,7 +80,7 @@ const BarsPage: React.FC = () => {
           {user && (
             <div className="bg-gray-100 dark:bg-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl p-6 mb-6">
               <div className="text-center mb-4">
-                <div className="text-3xl font-bold text-amber-400 mb-2">
+                <div className="text-3xl font-bold text-red-400 mb-2">
                   {visitedCount} / {bars.length}
                 </div>
                 <div className="text-gray-400">Bars Visited</div>
@@ -88,7 +88,7 @@ const BarsPage: React.FC = () => {
               
               <div className="w-full bg-gray-800 rounded-full h-3 mb-2">
                 <div
-                  className="bg-gradient-to-r from-amber-500 to-yellow-500 h-3 rounded-full transition-all duration-500"
+                  className="bg-gradient-to-r from-red-500 to-rose-600 h-3 rounded-full transition-all duration-500"
                   style={{ width: `${visitedPercentage}%` }}
                 />
               </div>
@@ -108,7 +108,7 @@ const BarsPage: React.FC = () => {
             placeholder="Search bars by name, city, or country..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-colors"
+            className="w-full pl-12 pr-4 py-3 bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-colors"
           />
         </div>
 
@@ -127,8 +127,8 @@ const BarsPage: React.FC = () => {
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`bg-white dark:bg-gray-900/80 backdrop-blur-sm border rounded-xl p-6 transition-all duration-300 hover:border-amber-500/50 dark:hover:border-amber-500/30 ${
-                  isVisited ? 'border-amber-500 dark:border-amber-500/50' : 'border-gray-200 dark:border-gray-700/50'
+                className={`bg-white dark:bg-gray-900/80 backdrop-blur-sm border rounded-xl p-6 transition-all duration-300 hover:border-red-500/50 dark:hover:border-red-500/30 ${
+                  isVisited ? 'border-red-500 dark:border-red-500/50' : 'border-gray-200 dark:border-gray-700/50'
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -136,10 +136,10 @@ const BarsPage: React.FC = () => {
                     {/* Rank */}
                     <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg ${
                       rank && rank <= 10 
-                        ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-black'
+                        ? 'bg-gradient-to-r from-red-500 to-rose-600 text-black'
                         : rank && rank <= 25
                         ? 'bg-gradient-to-r from-gray-400 to-gray-500 text-black'
-                        : 'bg-gradient-to-r from-amber-800 to-amber-900 text-white'
+                        : 'bg-gradient-to-r from-red-800 to-red-900 text-white'
                     }`}>
                       {rank || '?'}
                     </div>
@@ -155,7 +155,7 @@ const BarsPage: React.FC = () => {
                           <span>{bar.city === bar.country ? bar.city : `${bar.city}, ${bar.country}`}</span>
                         </div>
                         {bar.rank_2024 && bar.rank_2025 && (
-                          <div className="text-sm text-amber-600 dark:text-amber-400 mt-1">
+                          <div className="text-sm text-red-600 dark:text-red-400 mt-1">
                             {bar.rank_2025 < bar.rank_2024 ? '↗' : '↘'} 
                             {' '}2024: #{bar.rank_2024} → 2025: #{bar.rank_2025}
                           </div>
@@ -169,8 +169,8 @@ const BarsPage: React.FC = () => {
                     onClick={() => handleToggleVisit(bar.id)}
                     className={`flex items-center justify-center w-12 h-12 rounded-full transition-all duration-200 ${
                       isVisited
-                        ? 'bg-amber-500 text-white hover:bg-amber-600'
-                        : 'bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-amber-500 hover:text-white border border-gray-300 dark:border-gray-700'
+                        ? 'bg-red-500 text-white hover:bg-red-600'
+                        : 'bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-red-500 hover:text-white border border-gray-300 dark:border-gray-700'
                     }`}
                   >
                     {isVisited ? <Check size={20} /> : <Star size={20} />}
