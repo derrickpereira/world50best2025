@@ -14,8 +14,14 @@ const isGAAvailable = (): boolean => {
 export const trackPageView = (page_title: string, page_location?: string): void => {
   if (!isGAAvailable()) return;
   
+  const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
+  if (!measurementId) {
+    console.warn('GA Measurement ID not configured');
+    return;
+  }
+  
   try {
-    window.gtag('config', 'G-F9KZZQVLSN', {
+    window.gtag('config', measurementId, {
       page_title,
       page_location: page_location || window.location.href,
     });
