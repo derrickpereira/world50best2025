@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, MapPin, Clock, Calendar, ExternalLink, Plus, Check, AlertCircle, Share } from 'lucide-react';
+import { X, MapPin, Clock, Calendar, ExternalLink, Plus, Check, AlertCircle, Share, Map } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, parseISO } from 'date-fns';
 import { Event } from '../../types';
@@ -127,6 +127,13 @@ const EventModal: React.FC<EventModalProps> = ({
     }
   };
 
+  const handleGoogleMaps = () => {
+    if (event.latitude && event.longitude) {
+      const mapsUrl = `https://www.google.com/maps?q=${event.latitude},${event.longitude}`;
+      window.open(mapsUrl, '_blank');
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -145,15 +152,6 @@ const EventModal: React.FC<EventModalProps> = ({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="relative bg-white dark:bg-gray-900 rounded-2xl overflow-hidden w-full max-w-4xl max-h-[90vh] overflow-y-auto border border-red-500/50 dark:border-red-500/20"
           >
-            {/* Share Button */}
-            <button
-              onClick={handleShare}
-              className="absolute top-4 right-16 z-10 p-2 bg-gray-200/80 dark:bg-black/50 rounded-full text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-black/70 transition-colors"
-              title="Share this event"
-            >
-              <Share size={20} />
-            </button>
-
             {/* Close Button */}
             <button
               onClick={onClose}
@@ -280,27 +278,55 @@ const EventModal: React.FC<EventModalProps> = ({
                     </div>
                   )}
                   
-                  {/* Add/Remove Button - Only show for non-TBA events */}
-                  {!isTBA && (
-                    <button
-                      onClick={handleMainActionButtonClick}
-                      className={`flex items-center justify-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-                        isInAgenda
-                          ? 'bg-red-500 text-white hover:bg-red-600'
-                          : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-red-500 hover:text-white border border-gray-300 dark:border-gray-700'
-                      }`}
-                    >
-                      {isInAgenda ? <Check size={20} /> : <Plus size={20} />}
-                      <span>
-                        {isInAgenda 
-                          ? 'In Agenda' 
-                          : showTimeSelectorInternal 
-                            ? 'Confirm Arrival Time' 
-                            : 'Add to Agenda'
-                        }
-                      </span>
-                    </button>
-                  )}
+                  {/* Action Buttons */}
+                  <div className="flex flex-col space-y-2">
+                    {/* Share and Maps Buttons Row */}
+                    <div className="flex space-x-2">
+                      {/* Share Button */}
+                      <button
+                        onClick={handleShare}
+                        className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-700"
+                        title="Share this event"
+                      >
+                        <Share size={16} />
+                        <span className="text-sm">Share</span>
+                      </button>
+
+                      {/* Google Maps Button - Only show if coordinates exist */}
+                      {event.latitude && event.longitude && (
+                        <button
+                          onClick={handleGoogleMaps}
+                          className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-700"
+                          title="View on Google Maps"
+                        >
+                          <Map size={16} />
+                          <span className="text-sm">Maps</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Add/Remove Button - Only show for non-TBA events */}
+                    {!isTBA && (
+                      <button
+                        onClick={handleMainActionButtonClick}
+                        className={`flex items-center justify-center space-x-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
+                          isInAgenda
+                            ? 'bg-red-500 text-white hover:bg-red-600'
+                            : 'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-red-500 hover:text-white border border-gray-300 dark:border-gray-700'
+                        }`}
+                      >
+                        {isInAgenda ? <Check size={20} /> : <Plus size={20} />}
+                        <span>
+                          {isInAgenda 
+                            ? 'In Agenda' 
+                            : showTimeSelectorInternal 
+                              ? 'Confirm Arrival Time' 
+                              : 'Add to Agenda'
+                          }
+                        </span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
 
