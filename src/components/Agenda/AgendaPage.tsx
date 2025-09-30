@@ -8,7 +8,7 @@ import { Event } from '../../types';
 import AuthModal from '../Auth/AuthModal';
 import EventModal from '../Events/EventModal';
 import GuestDataIndicator from '../Auth/GuestDataIndicator';
-import { generateGoogleCalendarLink, downloadICSFile, trackCalendarExport } from '../../utils/calendarExport';
+import { openGoogleCalendarEvents, downloadICSFile, trackCalendarExport } from '../../utils/calendarExport';
 
 const AgendaPage: React.FC = () => {
   const { user } = useAuthStore();
@@ -58,8 +58,8 @@ const AgendaPage: React.FC = () => {
   const handleExportToGoogle = () => {
     if (agendaEvents.length === 0) return;
     
-    downloadICSFile(agendaEvents, userAgenda);
-    trackCalendarExport('google_ics', agendaEvents.length);
+    openGoogleCalendarEvents(agendaEvents, userAgenda);
+    trackCalendarExport('google', agendaEvents.length);
   };
 
   const handleExportToApple = () => {
