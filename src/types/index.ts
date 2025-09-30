@@ -23,6 +23,7 @@ export interface Bar {
   rank_2025?: number;
   city: string;
   country: string;
+  region: 'asia' | 'world';
   visited_count?: number;
   is_predicted_top5?: boolean;
 }

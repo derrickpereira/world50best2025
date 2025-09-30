@@ -12,10 +12,12 @@ const BarsPage: React.FC = () => {
     userVisits,
     loading,
     searchQuery,
+    selectedRegion,
     fetchBars,
     fetchUserVisits,
     toggleBarVisit,
     setSearchQuery,
+    setSelectedRegion,
     getFilteredBars,
     getVisitedCount,
     getVisitedPercentage,
@@ -70,14 +72,42 @@ const BarsPage: React.FC = () => {
             (The current list is a mix of 2025's 51-100 winners and 2024's Top 50, the final list will be updated after the awards)
           </p>
 
+          {/* Region Toggle */}
+          <div className="flex justify-center mb-6">
+            <div className="bg-gray-200 dark:bg-gray-800 rounded-lg p-1 flex">
+              <button
+                onClick={() => setSelectedRegion('world')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                  selectedRegion === 'world'
+                    ? 'bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                <span>World's 50 Best</span>
+              </button>
+              <button
+                onClick={() => setSelectedRegion('asia')}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
+                  selectedRegion === 'asia'
+                    ? 'bg-white dark:bg-gray-700 text-red-600 dark:text-red-400 shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                <span>Asia's 50 Best</span>
+              </button>
+            </div>
+          </div>
+
           {/* Progress Stats */}
           {user && (
             <div className="bg-gray-100 dark:bg-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl p-6 mb-6">
               <div className="text-center mb-4">
                 <div className="text-3xl font-bold text-red-400 mb-2">
-                  {visitedCount} / {bars.length}
+                  {visitedCount} / {bars.filter(bar => bar.region === selectedRegion).length}
                 </div>
-                <div className="text-gray-400">Bars Visited</div>
+                <div className="text-gray-400">
+                  {selectedRegion === 'world' ? "World's" : "Asia's"} 50 Best Bars Visited
+                </div>
               </div>
               
               <div className="w-full bg-gray-800 rounded-full h-3 mb-2">

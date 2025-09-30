@@ -15,12 +15,14 @@ interface BarState {
   loading: boolean;
   searchQuery: string;
   predictions: string[];
+  selectedRegion: 'world' | 'asia';
   
   // Actions
   fetchBars: () => Promise<void>;
   fetchUserVisits: () => Promise<void>;
   toggleBarVisit: (barId: string) => Promise<void>;
   setSearchQuery: (query: string) => void;
+  setSelectedRegion: (region: 'world' | 'asia') => void;
   updatePredictions: (predictions: string[]) => Promise<void>;
   fetchPredictions: () => Promise<void>;
   getFilteredBars: () => Bar[];
@@ -34,6 +36,7 @@ export const useBarStore = create<BarState>((set, get) => ({
   loading: false,
   searchQuery: '',
   predictions: [],
+  selectedRegion: 'world',
 
   fetchBars: async () => {
     set({ loading: true });
@@ -129,6 +132,10 @@ export const useBarStore = create<BarState>((set, get) => ({
     }
   },
 
+  setSelectedRegion: (region: 'world' | 'asia') => {
+    set({ selectedRegion: region });
+  },
+
   updatePredictions: async (predictions: string[]) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -187,26 +194,36 @@ export const useBarStore = create<BarState>((set, get) => ({
   },
 
   getFilteredBars: () => {
-    const { bars, searchQuery } = get();
+    const { bars, searchQuery, selectedRegion } = get();
     
-    if (!searchQuery) return bars;
+    // First filter by region
+    let filteredBars = bars.filter(bar => bar.region === selectedRegion);
     
-    return bars.filter(bar =>
-      bar.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bar.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bar.country.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    // Then filter by search query if provided
+    if (searchQuery) {
+      filteredBars = filteredBars.filter(bar =>
+        bar.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        bar.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        bar.country.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    
+    return filteredBars;
   },
 
   getVisitedCount: () => {
-    const { userVisits } = get();
-    return Object.values(userVisits).filter(visited => visited).length;
+    const { bars, userVisits, selectedRegion } = get();
+    // Only count visits for bars in the selected region
+    const regionBars = bars.filter(bar => bar.region === selectedRegion);
+    return regionBars.filter(bar => userVisits[bar.id]).length;
   },
 
   getVisitedPercentage: () => {
-    const { bars, userVisits } = get();
-    if (bars.length === 0) return 0;
-    const visitedCount = Object.values(userVisits).filter(visited => visited).length;
-    return Math.round((visitedCount / bars.length) * 100);
+    const { bars, userVisits, selectedRegion } = get();
+    // Only calculate percentage for bars in the selected region
+    const regionBars = bars.filter(bar => bar.region === selectedRegion);
+    if (regionBars.length === 0) return 0;
+    const visitedCount = regionBars.filter(bar => userVisits[bar.id]).length;
+    return Math.round((visitedCount / regionBars.length) * 100);
   },
 }));
