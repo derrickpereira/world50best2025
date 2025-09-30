@@ -7,6 +7,7 @@ import { useAuthStore } from '../../store/authStore';
 import { Event } from '../../types';
 import AuthModal from '../Auth/AuthModal';
 import EventModal from '../Events/EventModal';
+import GuestDataIndicator from '../Auth/GuestDataIndicator';
 import { generateGoogleCalendarLink, downloadICSFile, trackCalendarExport } from '../../utils/calendarExport';
 
 const AgendaPage: React.FC = () => {
@@ -85,6 +86,17 @@ const AgendaPage: React.FC = () => {
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
             Your personalized schedule for World's 50 Best Bars 2025
           </p>
+          
+          {/* Guest Data Indicator */}
+          {!user && agendaEvents.length > 0 && (
+            <div className="flex justify-center mt-4">
+              <GuestDataIndicator 
+                itemCount={agendaEvents.length}
+                itemType="events"
+                onSignUpClick={() => setShowAuthModal(true)}
+              />
+            </div>
+          )}
         </motion.div>
 
         {/* Date Navigation - Compact Design */}
