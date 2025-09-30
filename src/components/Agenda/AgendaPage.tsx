@@ -19,7 +19,7 @@ const AgendaPage: React.FC = () => {
     removeFromAgenda,
   } = useEventStore();
 
-  const [selectedDate, setSelectedDate] = useState('2025-07-11');
+  const [selectedDate, setSelectedDate] = useState('2025-10-04');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
@@ -32,12 +32,12 @@ const AgendaPage: React.FC = () => {
   }, [fetchUserAgenda]);
 
   const eventDates = [
-    '2025-07-11',
-    '2025-07-12',
-    '2025-07-13',
-    '2025-07-14',
-    '2025-07-15',
-    '2025-07-16',
+    '2025-10-04',
+    '2025-10-05',
+    '2025-10-06',
+    '2025-10-07',
+    '2025-10-08',
+    '2025-10-09',
   ];
 
   const agendaEvents = events.filter(event => userAgenda[event.id] !== undefined);
