@@ -28,10 +28,8 @@ const AgendaPage: React.FC = () => {
   }, [fetchEvents]);
 
   useEffect(() => {
-    if (user) {
-      fetchUserAgenda();
-    }
-  }, [user, fetchUserAgenda]);
+    fetchUserAgenda();
+  }, [fetchUserAgenda]);
 
   const eventDates = [
     '2025-07-11',
@@ -48,10 +46,6 @@ const AgendaPage: React.FC = () => {
   );
 
   const handleRemoveFromAgenda = async (eventId: string) => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
     await removeFromAgenda(eventId);
   };
 
@@ -74,26 +68,6 @@ const AgendaPage: React.FC = () => {
     trackCalendarExport('apple', agendaEvents.length);
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Personal Agenda</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">Sign in to create and manage your personal event agenda</p>
-          <button
-            onClick={() => setShowAuthModal(true)}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-          >
-            Sign In
-          </button>
-        </div>
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white">
