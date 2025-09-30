@@ -45,10 +45,8 @@ const EventsPage: React.FC = () => {
   }, [fetchEvents]);
 
   useEffect(() => {
-    if (user) {
-      fetchUserAgenda();
-    }
-  }, [user, fetchUserAgenda]);
+    fetchUserAgenda();
+  }, [fetchUserAgenda]);
 
   // Handle deep linking to specific events
   useEffect(() => {
@@ -82,11 +80,6 @@ const EventsPage: React.FC = () => {
   const filteredEvents = getFilteredEvents();
 
   const handleToggleAgenda = async (eventId: string, arrivalTime?: string) => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-
     if (userAgenda[eventId] !== undefined) {
       await removeFromAgenda(eventId);
     } else {
