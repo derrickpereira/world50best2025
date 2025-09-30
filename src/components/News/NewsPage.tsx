@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bell, Calendar, MapPin, Star, Trophy, Target, User, Clock, ExternalLink } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { useNewsStore } from '../../store/newsStore';
 
 // Icon mapping for news items
@@ -138,7 +139,7 @@ const NewsPage: React.FC = () => {
                     <div className="px-6 pb-6">
                       <div 
                         className="text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm max-w-none dark:prose-invert prose-a:text-red-600 dark:prose-a:text-red-400 prose-a:underline hover:prose-a:no-underline"
-                        dangerouslySetInnerHTML={{ __html: item.content }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.content) }}
                       />
                     </div>
                   </details>
