@@ -14,6 +14,7 @@ const PredictionsPage: React.FC = () => {
     fetchBars,
     fetchPredictions,
     updatePredictions,
+    getPredictionBars,
   } = useBarStore();
 
   const [selectedBars, setSelectedBars] = useState<Bar[]>([]);
@@ -39,7 +40,10 @@ const PredictionsPage: React.FC = () => {
     }
   }, [predictions, bars]);
 
-  const availableBars = bars.filter(bar => 
+  // Get only World's 50 Best bars for predictions
+  const predictionBars = getPredictionBars();
+  
+  const availableBars = predictionBars.filter(bar => 
     !selectedBars.some(selected => selected.id === bar.id) &&
     (searchQuery === '' || 
      bar.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -90,7 +94,10 @@ const PredictionsPage: React.FC = () => {
             </span>
           </h1>
           <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
-            Predict which bars will claim the top 5 spots in World's 50 Best Bars 2025
+            Predict which bars will claim the top 5 spots in The World's 50 Best Bars 2025
+          </p>
+          <p className="text-gray-500 dark:text-gray-500 text-center text-sm mt-2">
+            Choose from the world's finest bars competing for the top rankings
           </p>
         </motion.div>
 
@@ -179,7 +186,7 @@ const PredictionsPage: React.FC = () => {
           <div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
               <Star className="mr-3 text-red-600 dark:text-red-400" size={24} />
-              Select Bars
+              Select from World's 50 Best
             </h2>
 
             {/* Search */}
@@ -195,31 +202,51 @@ const PredictionsPage: React.FC = () => {
 
             {/* Available Bars */}
             <div className="space-y-2 max-h-96 overflow-y-auto">
-              {availableBars.slice(0, 20).map((bar) => (
-                <motion.button
-                  key={bar.id}
-                  layout
-                  onClick={() => handleAddBar(bar)}
-                  disabled={selectedBars.length >= 5}
-                  className={`w-full text-left p-4 bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 rounded-lg transition-all duration-200 ${
-                    selectedBars.length < 5
-                      ? 'hover:border-red-500/50 dark:hover:border-red-500/30 hover:bg-gray-200 dark:hover:bg-gray-800/50'
-                      : 'opacity-50 cursor-not-allowed'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{bar.name}</h3>
-                      <p className="text-gray-600 dark:text-gray-400 text-sm">{bar.city}, {bar.country}</p>
-                    </div>
-                    {(bar.rank_2024 || bar.rank_2025) && (
-                      <div className="text-red-600 dark:text-red-400 text-sm">
-                        #{bar.rank_2025 || bar.rank_2024}
-                      </div>
-                    )}
+              {predictionBars.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-gray-400 dark:text-gray-500 mb-4">
+                    <Star size={48} className="mx-auto mb-4 opacity-50" />
                   </div>
-                </motion.button>
-              ))}
+                  <p className="text-gray-600 dark:text-gray-400 text-lg mb-2">
+                    World's 50 Best Bars Coming Soon!
+                  </p>
+                  <p className="text-gray-500 dark:text-gray-500 text-sm">
+                    The World's 50 Best bars will be available for predictions once they're added to the database.
+                  </p>
+                </div>
+              ) : availableBars.length === 0 && searchQuery ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    No bars found matching "{searchQuery}"
+                  </p>
+                </div>
+              ) : (
+                availableBars.slice(0, 20).map((bar) => (
+                  <motion.button
+                    key={bar.id}
+                    layout
+                    onClick={() => handleAddBar(bar)}
+                    disabled={selectedBars.length >= 5}
+                    className={`w-full text-left p-4 bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700/50 rounded-lg transition-all duration-200 ${
+                      selectedBars.length < 5
+                        ? 'hover:border-red-500/50 dark:hover:border-red-500/30 hover:bg-gray-200 dark:hover:bg-gray-800/50'
+                        : 'opacity-50 cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">{bar.name}</h3>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm">{bar.city}, {bar.country}</p>
+                      </div>
+                      {(bar.rank_2024 || bar.rank_2025) && (
+                        <div className="text-red-600 dark:text-red-400 text-sm">
+                          #{bar.rank_2025 || bar.rank_2024}
+                        </div>
+                      )}
+                    </div>
+                  </motion.button>
+                ))
+              )}
             </div>
           </div>
         </div>

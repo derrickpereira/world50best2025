@@ -26,6 +26,7 @@ interface BarState {
   updatePredictions: (predictions: string[]) => Promise<void>;
   fetchPredictions: () => Promise<void>;
   getFilteredBars: () => Bar[];
+  getPredictionBars: () => Bar[];
   getVisitedCount: () => number;
   getVisitedPercentage: () => number;
 }
@@ -209,6 +210,21 @@ export const useBarStore = create<BarState>((set, get) => ({
     }
     
     return filteredBars;
+  },
+
+  getPredictionBars: () => {
+    const { bars } = get();
+    
+    // Filter to only World's 50 Best bars and limit to top 50
+    return bars
+      .filter(bar => bar.region === 'world')
+      .filter(bar => bar.rank_2025 || bar.rank_2024) // Only bars with ranks
+      .sort((a, b) => {
+        const rankA = a.rank_2025 || a.rank_2024 || 999;
+        const rankB = b.rank_2025 || b.rank_2024 || 999;
+        return rankA - rankB;
+      })
+      .slice(0, 50); // Limit to top 50
   },
 
   getVisitedCount: () => {
