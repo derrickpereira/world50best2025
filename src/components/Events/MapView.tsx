@@ -266,44 +266,117 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
     });
     markersRef.current = [];
 
-    // Create markers for events with coordinates
+    // Group events by exact coordinates to handle overlapping locations
     const validEvents = events.filter(event => 
       event.latitude && event.longitude
     );
 
-    validEvents.forEach((event, index) => {
+    const eventsByLocation = validEvents.reduce((groups, event) => {
+      const key = `${event.latitude},${event.longitude}`;
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(event);
+      return groups;
+    }, {} as Record<string, Event[]>);
+
+    // Create one marker per unique location
+    Object.entries(eventsByLocation).forEach(([locationKey, locationEvents]) => {
+      const firstEvent = locationEvents[0];
+      const eventCount = locationEvents.length;
+      
       const marker = new window.google.maps.Marker({
         position: {
-          lat: event.latitude!,
-          lng: event.longitude!
+          lat: firstEvent.latitude!,
+          lng: firstEvent.longitude!
         },
-        title: event.name,
+        title: eventCount > 1 ? `${firstEvent.venue} (${eventCount} events)` : firstEvent.name,
         icon: {
           path: window.google.maps.SymbolPath.CIRCLE,
-          fillColor: getMarkerColor(event.location),
+          fillColor: getMarkerColor(firstEvent.location),
           fillOpacity: 0.9,
-          strokeColor: '#1f2937', // Dark stroke for better visibility on dark theme
+          strokeColor: '#1f2937',
           strokeWeight: 3,
-          scale: 8 // Original size for better visual balance
-        }
+          scale: eventCount > 1 ? 12 : 8 // Larger marker for multiple events
+        },
+        // Add event count label for multiple events
+        ...(eventCount > 1 && {
+          label: {
+            text: eventCount.toString(),
+            color: '#ffffff',
+            fontWeight: 'bold',
+            fontSize: '11px'
+          }
+        })
       });
 
-      // Create info window
-      const infoWindow = new window.google.maps.InfoWindow({
-        content: `
-          <div class="p-3 max-w-xs">
-            <h3 class="font-semibold text-gray-900 mb-1">${event.name}</h3>
-            <p class="text-sm text-gray-600 mb-2">${event.venue}</p>
-            <p class="text-xs text-gray-500 mb-2">${event.location} • ${event.time_range_display || ''}</p>
-            <button 
-              onclick="window.viewEventDetails('${event.id}')" 
-              class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded transition-colors"
-            >
-              View Details
-            </button>
-          </div>
-        `
-      });
+      // Create enhanced info window for multiple events
+      const createMultiEventInfoWindow = (events: Event[]) => {
+        const sortedEvents = [...events].sort((a, b) => {
+          if (!a.date || !b.date) return 0;
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        });
+
+        let content = '';
+        
+        if (events.length === 1) {
+          // Single event - simple layout
+          const event = events[0];
+          content = `
+            <div class="p-3 max-w-xs">
+              <h3 class="font-semibold text-gray-900 mb-1">${event.name}</h3>
+              <p class="text-sm text-gray-600 mb-2">${event.venue}</p>
+              <p class="text-xs text-gray-500 mb-2">${event.location} • ${event.time_range_display || ''}</p>
+              <button 
+                onclick="window.viewEventDetails('${event.id}')" 
+                class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded transition-colors"
+              >
+                View Details
+              </button>
+            </div>
+          `;
+        } else {
+          // Multiple events - enhanced layout with navigation
+          content = `
+            <div class="p-3 max-w-sm">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-semibold text-gray-900">${sortedEvents[0].venue}</h3>
+                <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded-full">${events.length} events</span>
+              </div>
+              <p class="text-sm text-gray-600 mb-3">${sortedEvents[0].location}</p>
+              
+              <div class="space-y-2 max-h-48 overflow-y-auto">
+                ${sortedEvents.map(event => `
+                  <div class="border-l-2 border-red-500 pl-3 pb-2">
+                    <div class="flex items-start justify-between">
+                      <div class="flex-1">
+                        <h4 class="font-medium text-gray-900 text-sm leading-tight">${event.name}</h4>
+                        <p class="text-xs text-gray-500 mt-1">
+                          ${event.date ? new Date(event.date).toLocaleDateString('en-US', { 
+                            weekday: 'short', 
+                            month: 'short', 
+                            day: 'numeric' 
+                          }) : 'TBA'} • ${event.time_range_display || 'Time TBA'}
+                        </p>
+                      </div>
+                      <button 
+                        onclick="window.viewEventDetails('${event.id}')" 
+                        class="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded transition-colors ml-2 flex-shrink-0"
+                      >
+                        View
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+        
+        return new window.google.maps.InfoWindow({ content });
+      };
+
+      const infoWindow = createMultiEventInfoWindow(locationEvents);
 
       marker.addListener('click', () => {
         // Close all other info windows
@@ -315,8 +388,9 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
         
         infoWindow.open(mapInstance.current, marker);
         
-        if (onEventSelect) {
-          onEventSelect(event);
+        // For single event locations, trigger onEventSelect
+        if (locationEvents.length === 1 && onEventSelect) {
+          onEventSelect(locationEvents[0]);
         }
       });
 
@@ -324,7 +398,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
       markersRef.current.push(marker);
     });
 
-    // Initialize MarkerClusterer if library is available
+    // Initialize MarkerClusterer with updated markers
     if (window.markerClusterer && markersRef.current.length > 0) {
       clustererRef.current = new window.markerClusterer.MarkerClusterer({
         map: mapInstance.current,
@@ -335,7 +409,6 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
         }),
         renderer: {
           render: ({ markers, position }: { markers: any[], position: any }) => {
-            // Create custom cluster marker with count
             return new window.google.maps.Marker({
               position,
               icon: {
@@ -357,7 +430,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
         }
       });
     } else {
-      // Fallback: add markers directly to map if clustering not available
+      // Fallback: add markers directly to map
       markersRef.current.forEach(marker => {
         marker.setMap(mapInstance.current);
       });
