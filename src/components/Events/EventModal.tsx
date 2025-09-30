@@ -128,8 +128,9 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   const handleGoogleMaps = () => {
-    if (event.latitude && event.longitude) {
-      const mapsUrl = `https://www.google.com/maps?q=${event.latitude},${event.longitude}`;
+    if (event.venue) {
+      const searchQuery = `${event.venue} Hong Kong`;
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(searchQuery)}`;
       window.open(mapsUrl, '_blank');
     }
   };
@@ -292,8 +293,8 @@ const EventModal: React.FC<EventModalProps> = ({
                         <span className="text-sm">Share</span>
                       </button>
 
-                      {/* Google Maps Button - Only show if coordinates exist */}
-                      {event.latitude && event.longitude && (
+                      {/* Google Maps Button - Only show if venue exists */}
+                      {event.venue && (
                         <button
                           onClick={handleGoogleMaps}
                           className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors border border-gray-300 dark:border-gray-700"
