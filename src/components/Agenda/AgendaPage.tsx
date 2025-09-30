@@ -287,6 +287,12 @@ const AgendaPage: React.FC = () => {
         onClose={() => setSelectedEvent(null)}
         onToggleAgenda={handleToggleAgenda}
       />
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+      />
     </div>
   );
 };

@@ -251,52 +251,88 @@ export const useEventStore = create<EventState>((set, get) => ({
 
 // Helper function to parse time range and get end time
 export const parseEventEndTime = (event: Event): Date => {
-  // Handle TBA events
-  if (!event.date || !event.time) {
-    return new Date(); // Return current date as fallback
-  }
-  
-  const eventDate = parseISO(event.date);
-  const [hours, minutes] = event.time.split(':').map(Number);
-  const startDateTime = new Date(eventDate);
-  startDateTime.setHours(hours, minutes, 0, 0);
+  try {
+    // Handle TBA events
+    if (!event.date || !event.time) {
+      return new Date(); // Return current date as fallback
+    }
+    
+    // Validate and parse event date
+    let eventDate: Date;
+    try {
+      eventDate = parseISO(event.date);
+      if (isNaN(eventDate.getTime())) {
+        throw new Error('Invalid date');
+      }
+    } catch (error) {
+      console.error('Error parsing event date:', event.date, error);
+      eventDate = new Date(); // Fallback to current date
+    }
+    
+    // Validate and parse start time
+    const timeParts = event.time.split(':');
+    if (timeParts.length !== 2) {
+      console.error('Invalid time format:', event.time);
+      return addMinutes(eventDate, 180); // Default 3 hours
+    }
+    
+    const [hours, minutes] = timeParts.map(Number);
+    if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+      console.error('Invalid time values:', event.time);
+      return addMinutes(eventDate, 180); // Default 3 hours
+    }
+    
+    const startDateTime = new Date(eventDate);
+    startDateTime.setHours(hours, minutes, 0, 0);
 
-  const timeRange = event.time_range_display?.toLowerCase() || '';
-  
-  // Handle "till late" or "till sold out" - default to 2 AM next day
-  if (timeRange.includes('till late') || timeRange.includes('till sold out')) {
-    const endDateTime = new Date(startDateTime);
-    endDateTime.setDate(endDateTime.getDate() + 1);
-    endDateTime.setHours(2, 0, 0, 0);
-    return endDateTime;
-  }
-  
-  // Handle specific end times (e.g., "8pm - 11pm", "3pm - 7pm")
-  const timeRangeMatch = timeRange.match(/(\d{1,2}):?(\d{0,2})\s*(am|pm)?\s*-\s*(\d{1,2}):?(\d{0,2})\s*(am|pm)/);
-  if (timeRangeMatch) {
-    const [, , , , endHour, endMinute = '0', endPeriod] = timeRangeMatch;
-    let endHours = parseInt(endHour);
-    const endMinutes = parseInt(endMinute);
+    const timeRange = event.time_range_display?.toLowerCase() || '';
     
-    if (endPeriod === 'pm' && endHours !== 12) {
-      endHours += 12;
-    } else if (endPeriod === 'am' && endHours === 12) {
-      endHours = 0;
-    }
-    
-    const endDateTime = new Date(eventDate);
-    endDateTime.setHours(endHours, endMinutes, 0, 0);
-    
-    // If end time is before start time, it's next day
-    if (endDateTime <= startDateTime) {
+    // Handle "till late" or "till sold out" - default to 2 AM next day
+    if (timeRange.includes('till late') || timeRange.includes('till sold out')) {
+      const endDateTime = new Date(startDateTime);
       endDateTime.setDate(endDateTime.getDate() + 1);
+      endDateTime.setHours(2, 0, 0, 0);
+      return endDateTime;
     }
     
-    return endDateTime;
+    // Handle specific end times (e.g., "8pm-11pm", "3pm-7pm", "8:00pm-11:00pm")
+    const timeRangeMatch = timeRange.match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?\s*-\s*(\d{1,2})(?::(\d{2}))?\s*(am|pm)/i);
+    if (timeRangeMatch) {
+      const [, , , , endHour, endMinute = '0', endPeriod] = timeRangeMatch;
+      let endHours = parseInt(endHour);
+      const endMinutes = parseInt(endMinute || '0');
+      
+      // Validate parsed values
+      if (isNaN(endHours) || isNaN(endMinutes)) {
+        console.error('Failed to parse end time from:', timeRange);
+        return addMinutes(startDateTime, 180); // Default 3 hours
+      }
+      
+      if (endPeriod === 'pm' && endHours !== 12) {
+        endHours += 12;
+      } else if (endPeriod === 'am' && endHours === 12) {
+        endHours = 0;
+      }
+      
+      const endDateTime = new Date(eventDate);
+      endDateTime.setHours(endHours, endMinutes, 0, 0);
+      
+      // If end time is before start time, it's next day
+      if (endDateTime <= startDateTime) {
+        endDateTime.setDate(endDateTime.getDate() + 1);
+      }
+      
+      return endDateTime;
+    }
+    
+    // Default: 3 hours duration for "onwards" events
+    return addMinutes(startDateTime, 180);
+  } catch (error) {
+    console.error('Error in parseEventEndTime for event:', event.name, error);
+    // Ultimate fallback
+    const now = new Date();
+    return addMinutes(now, 180);
   }
-  
-  // Default: 3 hours duration for "onwards" events
-  return addMinutes(startDateTime, 180);
 };
 
 // Helper function to generate available arrival time slots
@@ -314,12 +350,23 @@ export const generateArrivalTimeSlots = (event: Event): string[] => {
   const endDateTime = parseEventEndTime(event);
   const cutoffDateTime = addMinutes(endDateTime, -30); // 30 minutes before end
   
+  
   const slots: string[] = [];
   let currentTime = new Date(startDateTime);
   
   while (currentTime < cutoffDateTime) {
     slots.push(format(currentTime, 'HH:mm'));
     currentTime = addMinutes(currentTime, 30);
+  }
+  
+  // Ensure events with reasonable duration (>= 1 hour) have at least 2 slots
+  const durationHours = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
+  if (slots.length <= 1 && durationHours >= 1) {
+    // Force generate at least 2 slots for events >= 1 hour duration
+    const secondSlot = format(addMinutes(startDateTime, 30), 'HH:mm');
+    if (!slots.includes(secondSlot)) {
+      slots.push(secondSlot);
+    }
   }
   
   return slots;
