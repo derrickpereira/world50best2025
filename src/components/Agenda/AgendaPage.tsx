@@ -246,36 +246,6 @@ const AgendaPage: React.FC = () => {
           )}
         </div>
 
-        {/* Summary */}
-        {agendaEvents.length > 0 && (
-          <div className="mt-8 bg-gray-100 dark:bg-gray-900/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700/50 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Agenda Summary</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-red-400">{agendaEvents.length}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Total Events</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-emerald-400">
-                  {agendaEvents.filter(e => e.location === 'Macau').length}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Macau Events</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-blue-400">
-                  {agendaEvents.filter(e => e.location === 'Hong Kong').length}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Hong Kong Events</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-purple-400">
-                  {new Set(agendaEvents.map(e => e.feature_bar)).size}
-                </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Unique Bars</div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Event Detail Modal */}
