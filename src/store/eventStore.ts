@@ -3,6 +3,12 @@ import { Event, SortOption, FilterLocation } from '../types';
 import { supabase } from '../lib/supabase';
 import { parseISO, addMinutes, format, differenceInMinutes } from 'date-fns';
 import { trackAgendaAction, trackSearch, trackFilter } from '../utils/analytics';
+import { 
+  getGuestAgenda, 
+  addToGuestAgenda, 
+  removeFromGuestAgenda,
+  getGuestSessionId 
+} from '../utils/guestStorage';
 
 interface EventState {
   events: Event[];
@@ -81,7 +87,6 @@ export const useEventStore = create<EventState>((set, get) => ({
     try {
       set({ conflictMessage: '' });
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return false;
 
       const { events } = get();
       const event = events.find(e => e.id === eventId);
@@ -95,23 +100,28 @@ export const useEventStore = create<EventState>((set, get) => ({
 
       const finalArrivalTime = arrivalTime || event.time;
 
-      // Check for conflicts based on arrival times
-      const hasConflict = await checkArrivalTimeConflict(event, finalArrivalTime, user.id);
-      if (hasConflict) {
-        return false;
-      }
+      if (user) {
+        // Authenticated user - save to Supabase
+        const hasConflict = await checkArrivalTimeConflict(event, finalArrivalTime, user.id);
+        if (hasConflict) {
+          return false;
+        }
 
-      const { error } = await supabase
-        .from('user_agenda')
-        .insert({ 
-          user_id: user.id, 
-          event_id: eventId,
-          arrival_time: finalArrivalTime 
-        });
-      
-      if (error) {
-        console.error('Error adding to agenda:', error);
-        return false;
+        const { error } = await supabase
+          .from('user_agenda')
+          .insert({ 
+            user_id: user.id, 
+            event_id: eventId,
+            arrival_time: finalArrivalTime 
+          });
+        
+        if (error) {
+          console.error('Error adding to agenda:', error);
+          return false;
+        }
+      } else {
+        // Guest user - save to localStorage
+        addToGuestAgenda(eventId, finalArrivalTime);
       }
       
       // Track successful addition
@@ -134,15 +144,20 @@ export const useEventStore = create<EventState>((set, get) => ({
   removeFromAgenda: async (eventId: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
 
-      const { error } = await supabase
-        .from('user_agenda')
-        .delete()
-        .eq('user_id', user.id)
-        .eq('event_id', eventId);
-      
-      if (error) throw error;
+      if (user) {
+        // Authenticated user - remove from Supabase
+        const { error } = await supabase
+          .from('user_agenda')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('event_id', eventId);
+        
+        if (error) throw error;
+      } else {
+        // Guest user - remove from localStorage
+        removeFromGuestAgenda(eventId);
+      }
       
       // Track removal
       const { events } = get();
@@ -162,21 +177,27 @@ export const useEventStore = create<EventState>((set, get) => ({
   fetchUserAgenda: async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('user_agenda')
-        .select('event_id, arrival_time')
-        .eq('user_id', user.id);
       
-      if (error) throw error;
-      
-      const agendaMap: Record<string, string | undefined> = {};
-      data?.forEach(item => {
-        agendaMap[item.event_id] = item.arrival_time;
-      });
-      
-      set({ userAgenda: agendaMap });
+      if (user) {
+        // Authenticated user - load from Supabase
+        const { data, error } = await supabase
+          .from('user_agenda')
+          .select('event_id, arrival_time')
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+        
+        const agendaMap: Record<string, string | undefined> = {};
+        data?.forEach(item => {
+          agendaMap[item.event_id] = item.arrival_time;
+        });
+        
+        set({ userAgenda: agendaMap });
+      } else {
+        // Guest user - load from localStorage
+        const guestAgenda = getGuestAgenda();
+        set({ userAgenda: guestAgenda });
+      }
     } catch (error) {
       console.error('Error fetching user agenda:', error);
     }

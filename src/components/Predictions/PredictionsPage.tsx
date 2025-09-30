@@ -26,10 +26,8 @@ const PredictionsPage: React.FC = () => {
   }, [fetchBars]);
 
   useEffect(() => {
-    if (user) {
-      fetchPredictions();
-    }
-  }, [user, fetchPredictions]);
+    fetchPredictions();
+  }, [fetchPredictions]);
 
   useEffect(() => {
     if (predictions.length > 0 && bars.length > 0) {
@@ -71,38 +69,12 @@ const PredictionsPage: React.FC = () => {
   };
 
   const handleSavePredictions = async () => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-    
     if (selectedBars.length > 0) {
       await updatePredictions(selectedBars.map(bar => bar.id));
       setIsSaved(true);
     }
   };
 
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white flex items-center justify-center">
-        <div className="text-center">
-          <Target size={64} className="mx-auto text-red-600 dark:text-red-400 mb-4" />
-          <h1 className="text-4xl font-bold mb-4">Make Your Predictions</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">Sign in to predict the top 5 bars for World's 50 Best Bars 2025</p>
-          <button
-            onClick={() => setShowAuthModal(true)}
-            className="bg-red-500 hover:bg-red-600 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
-          >
-            Sign In
-          </button>
-        </div>
-        <AuthModal
-          isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white">

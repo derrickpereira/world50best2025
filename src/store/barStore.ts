@@ -2,6 +2,12 @@ import { create } from 'zustand';
 import { Bar, UserBarVisit } from '../types';
 import { supabase } from '../lib/supabase';
 import { trackBarAction, trackPrediction, trackSearch } from '../utils/analytics';
+import { 
+  getGuestBarVisits, 
+  toggleGuestBarVisit,
+  getGuestPredictions,
+  saveGuestPredictions 
+} from '../utils/guestStorage';
 
 interface BarState {
   bars: Bar[];
@@ -35,7 +41,7 @@ export const useBarStore = create<BarState>((set, get) => ({
       const { data, error } = await supabase
         .from('bars')
         .select('*')
-        .order('rank_2025', { ascending: true, nullsLast: true });
+        .order('rank_2025', { ascending: true, nullsFirst: false });
       
       if (error) throw error;
       set({ bars: data || [] });
@@ -49,21 +55,27 @@ export const useBarStore = create<BarState>((set, get) => ({
   fetchUserVisits: async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('user_bar_visits')
-        .select('bar_id, visited')
-        .eq('user_id', user.id);
       
-      if (error) throw error;
-      
-      const visits: Record<string, boolean> = {};
-      data?.forEach(visit => {
-        visits[visit.bar_id] = visit.visited;
-      });
-      
-      set({ userVisits: visits });
+      if (user) {
+        // Authenticated user - load from Supabase
+        const { data, error } = await supabase
+          .from('user_bar_visits')
+          .select('bar_id, visited')
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+        
+        const visits: Record<string, boolean> = {};
+        data?.forEach(visit => {
+          visits[visit.bar_id] = visit.visited;
+        });
+        
+        set({ userVisits: visits });
+      } else {
+        // Guest user - load from localStorage
+        const guestVisits = getGuestBarVisits();
+        set({ userVisits: guestVisits });
+      }
     } catch (error) {
       console.error('Error fetching user visits:', error);
     }
@@ -72,23 +84,27 @@ export const useBarStore = create<BarState>((set, get) => ({
   toggleBarVisit: async (barId: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       const currentVisited = get().userVisits[barId] || false;
       const newVisited = !currentVisited;
 
-      const { error } = await supabase
-        .from('user_bar_visits')
-        .upsert({
-          user_id: user.id,
-          bar_id: barId,
-          visited: newVisited,
-          visited_at: newVisited ? new Date().toISOString() : null
-        }, {
-          onConflict: 'user_id,bar_id'
-        });
-      
-      if (error) throw error;
+      if (user) {
+        // Authenticated user - save to Supabase
+        const { error } = await supabase
+          .from('user_bar_visits')
+          .upsert({
+            user_id: user.id,
+            bar_id: barId,
+            visited: newVisited,
+            visited_at: newVisited ? new Date().toISOString() : null
+          }, {
+            onConflict: 'user_id,bar_id'
+          });
+        
+        if (error) throw error;
+      } else {
+        // Guest user - save to localStorage
+        toggleGuestBarVisit(barId);
+      }
       
       // Track bar visit action
       const { bars } = get();
@@ -116,19 +132,24 @@ export const useBarStore = create<BarState>((set, get) => ({
   updatePredictions: async (predictions: string[]) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
 
-      const { error } = await supabase
-        .from('user_predictions')
-        .upsert({
-          user_id: user.id,
-          prediction_json: JSON.stringify(predictions),
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'user_id'
-        });
-      
-      if (error) throw error;
+      if (user) {
+        // Authenticated user - save to Supabase
+        const { error } = await supabase
+          .from('user_predictions')
+          .upsert({
+            user_id: user.id,
+            prediction_json: JSON.stringify(predictions),
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'user_id'
+          });
+        
+        if (error) throw error;
+      } else {
+        // Guest user - save to localStorage
+        saveGuestPredictions(predictions);
+      }
       
       trackPrediction('save_predictions', predictions.length);
       set({ predictions });
@@ -140,19 +161,25 @@ export const useBarStore = create<BarState>((set, get) => ({
   fetchPredictions: async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('user_predictions')
-        .select('prediction_json')
-        .eq('user_id', user.id);
       
-      if (error) throw error;
-      
-      if (data && data.length > 0) {
-        set({ predictions: JSON.parse(data[0].prediction_json) });
+      if (user) {
+        // Authenticated user - load from Supabase
+        const { data, error } = await supabase
+          .from('user_predictions')
+          .select('prediction_json')
+          .eq('user_id', user.id);
+        
+        if (error) throw error;
+        
+        if (data && data.length > 0) {
+          set({ predictions: JSON.parse(data[0].prediction_json) });
+        } else {
+          set({ predictions: [] });
+        }
       } else {
-        set({ predictions: [] });
+        // Guest user - load from localStorage
+        const guestPredictions = getGuestPredictions();
+        set({ predictions: guestPredictions });
       }
     } catch (error) {
       console.error('Error fetching predictions:', error);

@@ -28,20 +28,14 @@ const BarsPage: React.FC = () => {
   }, [fetchBars]);
 
   useEffect(() => {
-    if (user) {
-      fetchUserVisits();
-    }
-  }, [user, fetchUserVisits]);
+    fetchUserVisits();
+  }, [fetchUserVisits]);
 
   const filteredBars = getFilteredBars();
   const visitedCount = getVisitedCount();
   const visitedPercentage = getVisitedPercentage();
 
   const handleToggleVisit = async (barId: string) => {
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
     await toggleBarVisit(barId);
   };
 
