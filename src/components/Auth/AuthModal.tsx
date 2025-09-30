@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Mail, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Mail, Lock, Eye, EyeOff, ArrowLeft, Calendar, Target, Star, CheckCircle, AlertTriangle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore';
 import { supabase } from '../../lib/supabase';
@@ -18,8 +18,12 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetPasswordMessage, setResetPasswordMessage] = useState('');
+  const [migrationResult, setMigrationResult] = useState<any>(null);
 
-  const { signIn, signUp } = useAuthStore();
+  const { signIn, signUp, hasGuestDataToMigrate, getGuestDataCounts } = useAuthStore();
+  
+  const guestDataCounts = getGuestDataCounts();
+  const hasGuestData = hasGuestDataToMigrate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,14 +35,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     setLoading(true);
     setError('');
+    setMigrationResult(null);
 
     try {
       if (isSignUp) {
-        await signUp(email, password);
+        const result = await signUp(email, password);
+        setMigrationResult(result);
+        
+        // Show success message briefly before closing
+        setTimeout(() => {
+          onClose();
+        }, 2000);
       } else {
         await signIn(email, password);
+        onClose();
       }
-      onClose();
     } catch (err: any) {
       setError(err.message || 'An error occurred');
     } finally {
@@ -140,6 +151,44 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 }
               </p>
             </div>
+
+            {/* Guest Data Preview for Sign Up */}
+            {isSignUp && hasGuestData && !isResettingPassword && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="mb-6 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 border border-green-200 dark:border-green-700/30 rounded-xl p-4"
+              >
+                <div className="flex items-start space-x-3">
+                  <CheckCircle size={20} className="text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
+                      We'll save your current progress!
+                    </h3>
+                    <div className="space-y-2">
+                      {guestDataCounts.agenda > 0 && (
+                        <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                          <Calendar size={14} className="text-green-600 dark:text-green-400" />
+                          <span>{guestDataCounts.agenda} agenda {guestDataCounts.agenda === 1 ? 'item' : 'items'}</span>
+                        </div>
+                      )}
+                      {guestDataCounts.predictions > 0 && (
+                        <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                          <Target size={14} className="text-green-600 dark:text-green-400" />
+                          <span>{guestDataCounts.predictions} {guestDataCounts.predictions === 1 ? 'prediction' : 'predictions'}</span>
+                        </div>
+                      )}
+                      {guestDataCounts.barVisits > 0 && (
+                        <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
+                          <Star size={14} className="text-green-600 dark:text-green-400" />
+                          <span>{guestDataCounts.barVisits} bar {guestDataCounts.barVisits === 1 ? 'visit' : 'visits'}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
