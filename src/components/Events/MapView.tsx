@@ -78,7 +78,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
       },
       scaleControl: true,
       rotateControl: true,
-      gestureHandling: 'cooperative'
+      gestureHandling: 'greedy'
     });
 
     updateMarkers();
@@ -505,7 +505,7 @@ const MapView: React.FC<MapViewProps> = ({ events, onEventSelect }) => {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
         <div 
           ref={mapRef}
-          className="w-full h-96"
+          className="w-full h-96 lg:h-[500px] xl:h-[600px]"
           style={{ minHeight: '400px' }}
         >
           {!isLoaded && (
