@@ -154,7 +154,7 @@ export const downloadICSFile = (events: Event[], userAgenda: Record<string, stri
   
   const link = document.createElement('a');
   link.href = url;
-  link.download = 'asia-50-best-bars-2025-agenda.ics';
+  link.download = 'world-50-best-bars-2025-agenda.ics';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
