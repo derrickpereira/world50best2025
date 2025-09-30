@@ -221,7 +221,7 @@ const PredictionsPage: React.FC = () => {
                   </p>
                 </div>
               ) : (
-                availableBars.slice(0, 20).map((bar) => (
+                availableBars.slice(0, 50).map((bar) => (
                   <motion.button
                     key={bar.id}
                     layout
