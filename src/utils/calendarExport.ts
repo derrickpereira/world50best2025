@@ -47,14 +47,14 @@ const convertHongKongToUTC = (hongKongTime: Date): Date => {
 // Generate Google Calendar URLs for events (opens directly in browser)
 export const openGoogleCalendarEvents = (events: Event[], userAgenda: Record<string, string | undefined>): void => {
   // For single event, open directly in Google Calendar
-  // For multiple events, download as ICS file to avoid popup blocker issues
+  // For multiple events, download ICS and redirect to Google Calendar import
   
   if (events.length === 1) {
     // Single event - open directly in Google Calendar
     const event = events[0];
     const arrivalTime = userAgenda[event.id] || event.time;
     if (!event.date || !arrivalTime) {
-      downloadICSFile(events, userAgenda);
+      downloadICSFileForGoogle(events, userAgenda);
       return;
     }
     
@@ -72,9 +72,8 @@ export const openGoogleCalendarEvents = (events: Event[], userAgenda: Record<str
     
     window.open(googleUrl.toString(), '_blank');
   } else {
-    // Multiple events - download as ICS file to avoid popup blocker issues
-    // This works reliably across all browsers and imports all events at once
-    downloadICSFile(events, userAgenda);
+    // Multiple events - download ICS and help user import to Google Calendar
+    downloadICSFileForGoogle(events, userAgenda);
   }
 };
 
@@ -146,7 +145,34 @@ export const generateICSContent = (events: Event[], userAgenda: Record<string, s
   return icsContent.join('\r\n');
 };
 
-// Download ICS file
+// Download ICS file for Google Calendar import
+export const downloadICSFileForGoogle = (events: Event[], userAgenda: Record<string, string | undefined>): void => {
+  const icsContent = generateICSContent(events, userAgenda);
+  const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'world-50-best-bars-2025-agenda.ics';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  
+  // Clean up the URL object
+  URL.revokeObjectURL(url);
+  
+  // After download, help user import to Google Calendar
+  setTimeout(() => {
+    const googleImportUrl = 'https://calendar.google.com/calendar/u/0/r/settings/import';
+    
+    // Show instructions
+    if (confirm('File downloaded! Click OK to open Google Calendar import page where you can upload the calendar file.')) {
+      window.open(googleImportUrl, '_blank');
+    }
+  }, 500);
+};
+
+// Download ICS file (for Apple Calendar and other apps)
 export const downloadICSFile = (events: Event[], userAgenda: Record<string, string | undefined>): void => {
   const icsContent = generateICSContent(events, userAgenda);
   const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });

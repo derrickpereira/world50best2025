@@ -158,7 +158,7 @@ const AgendaPage: React.FC = () => {
                   className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors duration-200 font-medium"
                 >
                   <CalendarPlus size={18} />
-                  <span>Google Calendar</span>
+                  <span>Add to Google Calendar</span>
                 </button>
                 <button
                   onClick={handleExportToApple}
