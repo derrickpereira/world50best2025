@@ -68,19 +68,51 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     setResetPasswordMessage('');
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
+      console.log('Attempting password reset for:', email);
+      console.log('Current origin:', window.location.origin);
+      
+      // First try without redirect to isolate the issue
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+      
+      console.log('Reset password response:', { data, error });
 
       if (error) {
-        setError(error.message);
+        console.error('Reset password error details:', {
+          message: error.message,
+          status: error.status,
+          details: error
+        });
+        
+        // Try with different approaches based on the error
+        if (error.message.includes('rate limit')) {
+          setError('Too many reset attempts. Please wait a few minutes and try again.');
+        } else if (error.message.includes('not found') || error.message.includes('user')) {
+          setError('No account found with this email address. Please check your email or sign up for a new account.');
+        } else if (error.message.includes('redirect')) {
+          // If redirect is the issue, try with a simpler redirect
+          console.log('Trying with redirect...');
+          const { error: redirectError } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}/reset-password`,
+          });
+          
+          if (redirectError) {
+            setError(`Reset email error: ${redirectError.message}`);
+          } else {
+            setResetPasswordMessage(
+              'Password reset email sent! Please check your inbox and follow the instructions to reset your password.'
+            );
+          }
+        } else {
+          setError(`Error: ${error.message}`);
+        }
       } else {
         setResetPasswordMessage(
           'Password reset email sent! Please check your inbox and follow the instructions to reset your password.'
         );
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred while sending the reset email');
+      console.error('Unexpected error in password reset:', err);
+      setError(err.message || 'An unexpected error occurred while sending the reset email');
     } finally {
       setLoading(false);
     }
