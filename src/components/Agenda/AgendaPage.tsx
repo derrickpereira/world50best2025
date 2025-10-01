@@ -169,7 +169,7 @@ const AgendaPage: React.FC = () => {
                 </button>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-                Google Calendar: Downloads file, then opens import page • Calendar File: For Apple Calendar, Outlook, etc.
+                Google Calendar: Downloads file to import manually • Calendar File: For Apple Calendar, Outlook, etc.
               </p>
             </div>
           </div>
