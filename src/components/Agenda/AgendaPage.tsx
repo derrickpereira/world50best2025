@@ -158,16 +158,19 @@ const AgendaPage: React.FC = () => {
                   className="flex items-center justify-center space-x-2 px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors duration-200 font-medium"
                 >
                   <CalendarPlus size={18} />
-                  <span>Add to Google Calendar</span>
+                  <span>Google Calendar</span>
                 </button>
                 <button
                   onClick={handleExportToApple}
                   className="flex items-center justify-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-medium"
                 >
-                  <CalendarPlus size={18} />
-                  <span>Apple Calendar</span>
+                  <Download size={18} />
+                  <span>Download Calendar File</span>
                 </button>
               </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
+                Google Calendar: Downloads file, then opens import page • Calendar File: For Apple Calendar, Outlook, etc.
+              </p>
             </div>
           </div>
         )}

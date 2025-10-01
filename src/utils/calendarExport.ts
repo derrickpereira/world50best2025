@@ -161,14 +161,10 @@ export const downloadICSFileForGoogle = (events: Event[], userAgenda: Record<str
   // Clean up the URL object
   URL.revokeObjectURL(url);
   
-  // After download, help user import to Google Calendar
+  // After download, automatically open Google Calendar import page
   setTimeout(() => {
     const googleImportUrl = 'https://calendar.google.com/calendar/u/0/r/settings/import';
-    
-    // Show instructions
-    if (confirm('File downloaded! Click OK to open Google Calendar import page where you can upload the calendar file.')) {
-      window.open(googleImportUrl, '_blank');
-    }
+    window.open(googleImportUrl, '_blank');
   }, 500);
 };
 
