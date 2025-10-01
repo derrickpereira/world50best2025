@@ -11,6 +11,7 @@ import NewsPage from './components/News/NewsPage';
 import BarsPage from './components/Bars/BarsPage';
 import PredictionsPage from './components/Predictions/PredictionsPage';
 import AdminDashboard from './components/Admin/AdminDashboard';
+import ResetPasswordPage from './components/Auth/ResetPasswordPage';
 
 // Inner component that has access to useLocation
 const AppContent: React.FC = () => {
@@ -64,6 +65,7 @@ const AppContent: React.FC = () => {
           <Route path="/bars" element={<BarsPage />} />
           <Route path="/predict" element={<PredictionsPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Routes>
       </main>
     </div>
