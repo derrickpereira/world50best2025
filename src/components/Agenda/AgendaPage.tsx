@@ -69,6 +69,11 @@ const AgendaPage: React.FC = () => {
     trackCalendarExport('apple', agendaEvents.length);
   };
 
+  const handleExportSingleEvent = (event: Event) => {
+    openGoogleCalendarEvents([event], userAgenda);
+    trackCalendarExport('google', 1);
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-black text-gray-900 dark:text-white">
@@ -228,17 +233,32 @@ const AgendaPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Remove Button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveFromAgenda(event.id);
-                        }}
-                        className="p-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors flex-shrink-0 ml-2"
-                        title="Remove from agenda"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      {/* Action Buttons */}
+                      <div className="flex items-center space-x-1 flex-shrink-0 ml-2">
+                        {/* Export Button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleExportSingleEvent(event);
+                          }}
+                          className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                          title="Export to Calendar"
+                        >
+                          <CalendarPlus size={16} />
+                        </button>
+                        
+                        {/* Remove Button */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveFromAgenda(event.id);
+                          }}
+                          className="p-2 text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                          title="Remove from agenda"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
